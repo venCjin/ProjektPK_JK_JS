@@ -1,6 +1,8 @@
 package org.organizer;
 
 import java.awt.EventQueue;
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
 
 //import org.organizer.Logic;
 
@@ -18,14 +20,22 @@ public class Main {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 		});
-		
+
 		// TODO Warstwa Logki
 		/*
-		Logic.RingAllAlerts();
-		*/
+		 * Logic.RingAllAlerts();
+		 */
+
+		// TESTS AND SHIT
+		// Instantiate a Date object
+		/*
+		 * Date date = new Date(); SimpleDateFormat dateFormat = new
+		 * SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		 * System.out.println("Today's date is: "+dateFormat.format(date));
+		 */
 	}
 
 }
