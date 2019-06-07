@@ -13,15 +13,11 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-//import javax.swing.SpinnerDateModel;
-//import java.util.Calendar;
 
 public class AddEventWindow {
 	/**
@@ -147,6 +143,8 @@ public class AddEventWindow {
 				frame.dispose();
 			}
 		});
+		btnCancel.setBounds(265, 237, 85, 23);
+		frame.getContentPane().add(btnCancel);
 
 		JSpinner endHourSpin = new JSpinner();
 		endHourSpin.setModel(new SpinnerNumberModel(0, 0, 23, 1));
@@ -161,8 +159,6 @@ public class AddEventWindow {
 		endMinSpin.setModel(new SpinnerNumberModel(0, 0, 59, 1));
 		endMinSpin.setBounds(341, 162, 44, 20);
 		frame.getContentPane().add(endMinSpin);
-		btnCancel.setBounds(265, 237, 85, 23);
-		frame.getContentPane().add(btnCancel);
 
 		JButton btnOk = new JButton("OK");
 		btnOk.addActionListener(new ActionListener() {
@@ -171,61 +167,18 @@ public class AddEventWindow {
 				String desc = descField.getText();
 				String place = placeField.getText();
 
-				SimpleDateFormat in = new SimpleDateFormat("dd-MM-yyyy");
-				SimpleDateFormat out = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-				StringBuilder buf = new StringBuilder("");
-				int temp = 0;
-
-				buf.append(in.format(startDateChooser.getDate()));
-				buf.append(" ");
-				temp = (int) startHourSpin.getValue();
-				if (temp < 10)
-					buf.append("0");
-				buf.append(temp);
-				buf.append(":");
-				temp = (int) startMinSpin.getValue();
-				if (temp < 10)
-					buf.append("0");
-				buf.append(temp);
-				buf.append(":00");
-//				System.out.println("start: " + buf.toString());
-				Date startDate = null;
-				try {
-					startDate = out.parse(buf.toString());
-				} catch (ParseException e2) {
-					e2.printStackTrace();
-				}
-
-				buf.setLength(0);
-//				System.out.println("buf: " + buf.toString());
-
-				buf.append(in.format(endDateChooser.getDate()));
-				buf.append(" ");
-				temp = (int) endHourSpin.getValue();
-				if (temp < 10)
-					buf.append("0");
-				buf.append(temp);
-				buf.append(":");
-				temp = (int) endMinSpin.getValue();
-				if (temp < 10)
-					buf.append("0");
-				buf.append(temp);
-				buf.append(":00");
-//				System.out.println("end: " + buf.toString());
-				Date endDate = null;
-				try {
-					endDate = out.parse(buf.toString());
-				} catch (ParseException e3) {
-					e3.printStackTrace();
-				}
-
 				// TODO importance
 				int impotranece = 0;
+
+				Date startDate = Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
+						(int) startMinSpin.getValue(), 0);
+				Date endDate = Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
+						(int) endMinSpin.getValue(), 0);
 
 				Event event = null;
 				try {
 					if (alarmChckbx.isSelected()) {
-						Date alarmDate = alarmChooser.getDate();
+						Date alarmDate = Operations.parseDate(alarmChooser.getDate(), 0, 0, 0);
 						event = new Event(name, desc, place, startDate, endDate, alarmDate, impotranece);
 					} else
 						event = new Event(name, desc, place, startDate, endDate, null, impotranece);

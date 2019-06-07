@@ -50,10 +50,10 @@ public class Event implements Comparable<Event>, Serializable {
 		this.place = place;
 
 		if (dataRozp == null)
-			throw new EventError("Nie zosta³a wybrana data rozpoczecia wydarzenia");
+			throw new EventError("Nieprawid³owa data rozpoczecia wydarzenia");
 		this.startDate = dataRozp;
 		if (endDate == null)
-			throw new EventError("Nie zosta³a wybrana data zakonczenia wydarzenia");
+			throw new EventError("Nieprawid³owa data zakonczenia wydarzenia");
 		this.endDate = endDate;
 		if (endDate.before(dataRozp))
 			throw new EventError("Data rozpoczecia wydarzenia musi byc przed jego zakonczeniem");
@@ -224,9 +224,9 @@ public class Event implements Comparable<Event>, Serializable {
 	 */
 	@Override
 	public String toString() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		// TODO alarmFormat?
-		 SimpleDateFormat alarmFormat = new SimpleDateFormat("dd/MM/yyyy");
+		 SimpleDateFormat alarmFormat = new SimpleDateFormat("dd-MM-yyyy");
 		String alarm;
 		if(alarmDate!=null) alarm = alarmFormat.format(alarmDate);
 		else alarm = "(nie ustawiono)";
