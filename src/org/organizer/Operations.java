@@ -26,13 +26,19 @@ public class Operations {
 		}
 		return date;
 	}
-
+	
+	/**
+	 * Scala podana date z czasem 00:00:00
+	 * 
+	 * @param d Data wejsciowa
+	 * @return Data w formacie "dd-MM-yyyy 00:00:00"
+	 */
 	public static Date parseDate(Date d) {
 		return parseDate(d, 0, 0, 0);
 	}
 
 	/**
-	 * Scala podana date z czasem
+	 * Scala podana date z podanym czasem
 	 * 
 	 * @param d Data wejsciowa
 	 * @param h Godziny
@@ -78,6 +84,7 @@ public class Operations {
 
 	/**
 	 * Usuwa Wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹
+	 * 
 	 * @param d data
 	 */
 	public static void deleteEventsBefore(Date d) {
@@ -85,6 +92,6 @@ public class Operations {
 		for (Event e : Data.AllEvents)
 			if (e.endDate.before(del))
 				Data.AllEvents.remove(e);
-		//TODO refresh ??
+		// TODO refresh ??
 	}
 }

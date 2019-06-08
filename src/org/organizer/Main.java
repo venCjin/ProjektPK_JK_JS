@@ -16,7 +16,7 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Organizer window = new Organizer();
+					OrganizerWindow window = new OrganizerWindow();
 					window.window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
