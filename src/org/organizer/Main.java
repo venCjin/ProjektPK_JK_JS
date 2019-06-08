@@ -1,10 +1,6 @@
 package org.organizer;
 
 import java.awt.EventQueue;
-//import java.text.SimpleDateFormat;
-//import java.util.Date;
-
-//import org.organizer.Logic;
 
 public class Main {
 
@@ -12,11 +8,16 @@ public class Main {
 	 * Shows GUI
 	 */
 	public static void main(String[] args) {
+
+		if (args.length > 0)
+			if (args[0].equals("XML")) {}
+//				Data.AllEvents = Input.AutoImportXML();
+
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Organizer window = new Organizer();
-					window.monthWindow.setVisible(true);
+					window.window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

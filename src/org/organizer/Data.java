@@ -10,6 +10,7 @@ public class Data {
 	 */
 	public static List<Event> AllEvents = new ArrayList<Event>();
 
+	// TODO jak u¿yæ ??
 	/**
 	 * Lista przechowujaca wyszukane Wydarzenia
 	 */

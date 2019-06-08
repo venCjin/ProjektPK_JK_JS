@@ -12,13 +12,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.text.SimpleDateFormat;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class Organizer {
 
-	JFrame monthWindow;
+	JFrame window;
 
 	/**
 	 * Create the main application window.
@@ -31,39 +30,29 @@ public class Organizer {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		monthWindow = new JFrame("Organizer");
-		monthWindow.setBounds(100, 100, 450, 300);
-		monthWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		monthWindow.getContentPane().setLayout(null);
-		monthWindow.setResizable(false);
+		window = new JFrame("Organizer");
+		window.setBounds(100, 100, 450, 300);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.getContentPane().setLayout(null);
+		window.setResizable(false);
 
 		JCalendar calendar = new JCalendar();
 		calendar.getDayChooser().setAlwaysFireDayProperty(true);
 
 		// klikniecie w dzieñ
-		// TODO wyskakuj¹ce okienko
 		calendar.getDayChooser().addPropertyChangeListener("day", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				/*
-				 * System.out.println(e.getPropertyName() + ": " + e.getNewValue());
-				 * 
-				 * System.out.println("Miesiac: " + calendar.getMonthChooser().getMonth()+1);
-				 * //indexowanie od 0
-				 * 
-				 * System.out.println("Rok: " + calendar.getYearChooser().getYear());
-				 */
-//				DayWindow dayWindow = new DayWindow();
-//				System.out.println(new SimpleDateFormat("dd-MM-yyyy").format(calendar.getDate()));
-				DayWindow.show(new SimpleDateFormat("dd-MM-yyyy").format(calendar.getDate()));
+//				DayWindow.show(new SimpleDateFormat("dd-MM-yyyy").format(calendar.getDate()));
+				DayWindow.show(Operations.parseDateToString(calendar.getDate(), "dd-MM-yyyy"));
 			}
 		});
 
 		calendar.setBounds(0, 0, 434, 240);
-		monthWindow.getContentPane().add(calendar);
+		window.getContentPane().add(calendar);
 
 		JMenuBar menuBar = new JMenuBar();
-		monthWindow.setJMenuBar(menuBar);
+		window.setJMenuBar(menuBar);
 
 		JMenu mnWydarzenia = new JMenu("Wydarzenia");
 		menuBar.add(mnWydarzenia);
@@ -77,6 +66,11 @@ public class Organizer {
 		mnWydarzenia.add(mntmDodaj);
 
 		JMenuItem mntmUsuStarszeNiz = new JMenuItem("Usuñ starsze niz...");
+		mntmUsuStarszeNiz.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DeleteBeforeWindow.show();
+			}
+		});
 		mnWydarzenia.add(mntmUsuStarszeNiz);
 
 		JMenu mnDane = new JMenu("Dane");

@@ -13,7 +13,6 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionListener;
-import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -65,10 +64,6 @@ public class AddEventWindow {
 		frame.getContentPane().add(lblName);
 
 		nameField = new JTextField();
-		nameField.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		lblName.setLabelFor(nameField);
 		nameField.setBounds(119, 11, 305, 20);
 		frame.getContentPane().add(nameField);
@@ -170,18 +165,22 @@ public class AddEventWindow {
 				// TODO importance
 				int impotranece = 0;
 
-				Date startDate = Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
-						(int) startMinSpin.getValue(), 0);
-				Date endDate = Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
-						(int) endMinSpin.getValue(), 0);
-
 				Event event = null;
 				try {
 					if (alarmChckbx.isSelected()) {
-						Date alarmDate = Operations.parseDate(alarmChooser.getDate(), 0, 0, 0);
-						event = new Event(name, desc, place, startDate, endDate, alarmDate, impotranece);
+						event = new Event(name, desc, place,
+								Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
+										(int) startMinSpin.getValue(), 0),
+								Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
+										(int) endMinSpin.getValue(), 0),
+								Operations.parseDate(alarmChooser.getDate()), impotranece);
 					} else
-						event = new Event(name, desc, place, startDate, endDate, null, impotranece);
+						event = new Event(name, desc, place,
+								Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
+										(int) startMinSpin.getValue(), 0),
+								Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
+										(int) endMinSpin.getValue(), 0),
+								null, impotranece);
 					Data.AllEvents.add(event);
 //					System.out.println(event.toString());
 //					System.out.println(Data.AllEvents.toString());

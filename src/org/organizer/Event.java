@@ -1,7 +1,7 @@
 package org.organizer;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
+//import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -11,8 +11,8 @@ public class Event implements Comparable<Event>, Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private String description = "";
-	private String place = "";
+	private String description;
+	private String place;
 
 	protected Date startDate;
 	protected Date endDate;
@@ -30,13 +30,13 @@ public class Event implements Comparable<Event>, Serializable {
 	/**
 	 * Konstruktor tworzacy nowy obiekt z podanymi parametrami.
 	 * 
-	 * @param name               Nazwa wydarzenia
-	 * @param descriptionription Opis wydarzenia
-	 * @param place              Miejsce wydarzenia
-	 * @param startDate          Data rozpoczecia wydarzenia
-	 * @param endDate            Data zakonczenia wydarzenia
-	 * @param alarmDate          Data alarmu wydarzenia
-	 * @param importance         Waznosc wydarzenia
+	 * @param name        Nazwa wydarzenia
+	 * @param description Opis wydarzenia
+	 * @param place       Miejsce wydarzenia
+	 * @param startDate   Data rozpoczecia wydarzenia
+	 * @param endDate     Data zakonczenia wydarzenia
+	 * @param alarmDate   Data alarmu wydarzenia
+	 * @param importance  Waznosc wydarzenia
 	 * @throws EventError Okienko dialogowe. Pokazuje sie jezeli wymagany atrybut
 	 *                    jest pusty.
 	 */
@@ -224,14 +224,28 @@ public class Event implements Comparable<Event>, Serializable {
 	 */
 	@Override
 	public String toString() {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		// TODO alarmFormat?
-		 SimpleDateFormat alarmFormat = new SimpleDateFormat("dd-MM-yyyy");
+		//TODO czy formaty daty nie powinny zostac oddelegowane do Operations??
 		String alarm;
-		if(alarmDate!=null) alarm = alarmFormat.format(alarmDate);
-		else alarm = "(nie ustawiono)";
+		// ver 1
+		/*
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		SimpleDateFormat alarmFormat = new SimpleDateFormat("dd-MM-yyyy");
+		if (alarmDate != null)
+			alarm = alarmFormat.format(alarmDate);
+		else
+			alarm = "(nie ustawiono)";
 		return "Wydarzenie [nazwa=" + name + ", opis=" + description + ", miejsce=" + place + ", data rozpoczecia="
 				+ dateFormat.format(startDate) + ", data zakonczenia=" + dateFormat.format(endDate) + ", data alarmu="
-				+  alarm + ", waznosc=" + importance + "]";
+				+ alarm + ", waznosc=" + importance + "]";
+		*/
+		// ver 2
+		if (alarmDate != null)
+			alarm = Operations.parseDateToString(alarmDate,"dd-MM-yyyy");
+		else
+			alarm = "(nie ustawiono)";
+		return "Wydarzenie [nazwa=" + name + ", opis=" + description + ", miejsce=" + place + 
+				", data rozpoczecia=" + Operations.parseDateToString(startDate,"dd-MM-yyyy HH:mm:ss")
+				+ ", data zakonczenia=" + Operations.parseDateToString(endDate,"dd-MM-yyyy HH:mm:ss")
+				+ ", data alarmu=" + alarm + ", waznosc=" + importance + "]";
 	}
 }
