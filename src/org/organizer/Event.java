@@ -63,7 +63,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Getter - Zwraca nazwe wydarzenia.
+	 * Zwraca nazwe wydarzenia.
 	 * 
 	 * @return Nazwa wydarzenia
 	 */
@@ -72,7 +72,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Setter - Ustawia nazwe wydarzenia.
+	 * Ustawia nazwe wydarzenia.
 	 * 
 	 * @param name Nazwa wydarzenia
 	 */
@@ -81,7 +81,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Getter - Zwraca opis wydarzenia.
+	 * Zwraca opis wydarzenia.
 	 * 
 	 * @return Opis wydarzenia
 	 */
@@ -90,7 +90,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Setter - Ustawia opis wydarzenia.
+	 * Ustawia opis wydarzenia.
 	 * 
 	 * @param description Opis wydarzenia
 	 */
@@ -99,7 +99,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Getter - Zwraca miejsce wydarzenia.
+	 * Zwraca miejsce wydarzenia.
 	 * 
 	 * @return Miejsce wydarzenia
 	 */
@@ -108,7 +108,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Setter - Ustawia miejsce wydarzenia.
+	 * Ustawia miejsce wydarzenia.
 	 * 
 	 * @param place Miejsce wydarzenia
 	 */
@@ -117,7 +117,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Getter - Zwraca date rozpoczecia wydarzenia.
+	 * Zwraca date rozpoczecia wydarzenia.
 	 * 
 	 * @return Data rozpoczecia wydarzenia
 	 */
@@ -126,7 +126,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Setter - Ustawia date rozpoczecia wydarzenia.
+	 * Ustawia date rozpoczecia wydarzenia.
 	 * 
 	 * @param startDate Data rozpoczecia wydarzenia
 	 */
@@ -135,7 +135,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Getter - Zwraca date zakonczenia wydarzenia.
+	 * Zwraca date zakonczenia wydarzenia.
 	 * 
 	 * @return endDate Data zakonczenia wydarzenia
 	 */
@@ -144,7 +144,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Setter - Ustawia date zakonczenia wydarzenia.
+	 * Ustawia date zakonczenia wydarzenia.
 	 * 
 	 * @param endDate Data zakonczenia wydarzenia
 	 */
@@ -153,7 +153,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Getter - Zwraca date alarmu wydarzenia.
+	 * Zwraca date alarmu wydarzenia.
 	 * 
 	 * @return Data alarmu wydarzenia
 	 */
@@ -162,7 +162,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Setter - Ustawia date alarmu wydarzenia.
+	 * Ustawia date alarmu wydarzenia.
 	 * 
 	 * @param alarmDate Data alarmu wydarzenia
 	 */
@@ -171,7 +171,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Getter - Zwraca waznosc wydarzenia.
+	 * Zwraca waznosc wydarzenia.
 	 * 
 	 * @return Waznosc wydarzenia
 	 */
@@ -180,7 +180,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Setter - Ustawia waznosc wydarzenia.
+	 * Ustawia waznosc wydarzenia.
 	 * 
 	 * @param importance Waznosc wydarzenia
 	 */
@@ -220,25 +220,11 @@ public class Event implements Comparable<Event>, Serializable {
 	};
 
 	/**
-	 * Podsumownaie wydarzenia.
+	 * Podsumowuje wydarzenie.
 	 */
 	@Override
 	public String toString() {
-		//TODO czy formaty daty nie powinny zostac oddelegowane do Operations??
 		String alarm;
-		// ver 1
-		/*
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		SimpleDateFormat alarmFormat = new SimpleDateFormat("dd-MM-yyyy");
-		if (alarmDate != null)
-			alarm = alarmFormat.format(alarmDate);
-		else
-			alarm = "(nie ustawiono)";
-		return "Wydarzenie [nazwa=" + name + ", opis=" + description + ", miejsce=" + place + ", data rozpoczecia="
-				+ dateFormat.format(startDate) + ", data zakonczenia=" + dateFormat.format(endDate) + ", data alarmu="
-				+ alarm + ", waznosc=" + importance + "]";
-		*/
-		// ver 2
 		if (alarmDate != null)
 			alarm = Operations.parseDateToString(alarmDate,"dd-MM-yyyy");
 		else

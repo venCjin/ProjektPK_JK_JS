@@ -181,7 +181,7 @@ public class AddEventWindow {
 								Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
 										(int) endMinSpin.getValue(), 0),
 								null, impotranece);
-					Data.AllEvents.add(event);
+					Operations.addEvent(event);
 //					System.out.println(event.toString());
 //					System.out.println(Data.AllEvents.toString());
 					frame.dispose();

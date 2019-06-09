@@ -125,13 +125,13 @@ public class Operations {
 	}
 
 	/**
-	 * Dodanie nowego Zdarzenia i sprawdzenie czy juz nie ma wtedy Zdarzenia
+	 * Dodaje nowe Wydarzenie i sprawdza czy juz nie ma wtedy innego Wydarzenia
 	 * 
-	 * @param e Zdarzenie do dodania
-	 * @throws Collision
+	 * @param e Wydarzenie do dodania
+	 * @throws EventError
 	 */
-	void Add(Event e) throws EventError {
-		// TODO sprawdziæ
+	public static void addEvent(Event e) throws EventError {
+		// TODO sprawdziæ bo coœ mi nie pasi
 		for (int i = 0; i < Data.AllEvents.size(); i++) {
 			if (e.startDate.after(Data.AllEvents.get(i).startDate) && e.startDate.before(Data.AllEvents.get(i).endDate))
 				throw new EventError("New event takes place during a old event");
@@ -141,20 +141,20 @@ public class Operations {
 				throw new EventError("Nowe wydarzenie koñczy siê po rozpoczêciu nastêpnego.");
 		}
 		Data.AllEvents.add(e);
-		SortDate();
+		sortDate();
 	}
 
 	/**
 	 * Sortuje Wydarzenia po dacie
 	 */
-	public void SortDate() {
+	public static void sortDate() {
 		Collections.sort(Data.AllEvents);
 	}
 
 	/**
 	 * Sortuje Wydarzenia po ich wa¿nosci
 	 */
-	public void SortImportance() {
+	public static void sortImportance() {
 		Collections.sort(Data.AllEvents, Event.ImportanceComparator);
 	}
 
