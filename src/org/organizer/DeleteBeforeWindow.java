@@ -14,7 +14,7 @@ public class DeleteBeforeWindow {
 	private JFrame frame;
 
 	/**
-	 * Launch the application.
+	 * 
 	 */
 	public static void show() {
 		EventQueue.invokeLater(new Runnable() {
@@ -30,14 +30,14 @@ public class DeleteBeforeWindow {
 	}
 
 	/**
-	 * Create the application.
+	 * 
 	 */
 	protected DeleteBeforeWindow() {
 		initialize();
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * 
 	 */
 	private void initialize() {
 		frame = new JFrame();
