@@ -6,7 +6,6 @@ bin
 .classpath
 .project
 *.pdf
-*.odt
 .settings
 
 # Compiled class file
