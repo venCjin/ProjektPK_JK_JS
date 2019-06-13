@@ -8,6 +8,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 import com.toedter.calendar.JCalendar;
 
 public class Operations {
@@ -118,6 +121,10 @@ public class Operations {
 	 */
 	public static void deleteEventsBefore(Date d) {
 		Date del = Operations.parseDate(d);
+		if (del == null) {
+			JOptionPane.showMessageDialog(new JFrame(), "Niepoprawna data.", "EventError", JOptionPane.ERROR_MESSAGE);
+//			return 
+		}
 		for (Event e : Data.AllEvents)
 			if (e.endDate.before(del))
 				Data.AllEvents.remove(e);
@@ -131,6 +138,9 @@ public class Operations {
 	 * @throws EventError
 	 */
 	public static void addEvent(Event e) throws EventError {
+		
+		
+		
 		// TODO sprawdziæ bo coœ mi nie pasi
 		for (int i = 0; i < Data.AllEvents.size(); i++) {
 			if (e.startDate.after(Data.AllEvents.get(i).startDate) && e.startDate.before(Data.AllEvents.get(i).endDate))

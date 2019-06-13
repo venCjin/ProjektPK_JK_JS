@@ -164,7 +164,8 @@ public class AddEventWindow {
 
 				// TODO importance
 				int impotranece = 0;
-
+				// TODO do Operations
+/*
 				Event event = null;
 				try {
 					if (alarmChckbx.isSelected()) {
@@ -188,6 +189,7 @@ public class AddEventWindow {
 				} catch (EventError e1) {
 					e1.printStackTrace();
 				}
+*/
 			}
 		});
 		btnOk.setBounds(356, 237, 68, 23);
