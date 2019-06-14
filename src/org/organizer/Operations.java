@@ -1,13 +1,13 @@
 package org.organizer;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -117,7 +117,7 @@ public class Operations {
 	/**
 	 * Usuwa Wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹.
 	 * 
-	 * @param d data
+	 * @param d Data
 	 */
 	public static void deleteEventsBefore(Date d) {
 		Date del = Operations.parseDate(d);
@@ -138,9 +138,7 @@ public class Operations {
 	 * @throws EventError
 	 */
 	public static void addEvent(Event e) throws EventError {
-		
-		
-		
+
 		// TODO sprawdziæ bo coœ mi nie pasi
 		for (int i = 0; i < Data.AllEvents.size(); i++) {
 			if (e.startDate.after(Data.AllEvents.get(i).startDate) && e.startDate.before(Data.AllEvents.get(i).endDate))
@@ -180,24 +178,15 @@ public class Operations {
 				Data.SearchedEvents.add(e);
 	}
 
+	/* Metody obs³uguj¹ce GUI */
 	/**
 	 * Koloruje na wybrany kolor dni, w których s¹ wyszukane wydarzenia.
 	 * 
-	 * @param calendar Kalendarz obiekt klasy JCalendar
+	 * @param calendar Kalendarz, obiekt klasy JCalendar
 	 * @param c        Kolor
 	 */
 	public static void colorSearchedEvents(JCalendar calendar, Color c) {
-		String input = "1/" + (calendar.getMonthChooser().getMonth() + 1) + "/" + calendar.getYearChooser().getYear();
-		Calendar temp = Calendar.getInstance();
-		temp.setTime(Operations.parseStringToDate(input, "d/M/yyyy"));
-		int offset = temp.get(Calendar.DAY_OF_WEEK); // 1=nd
-		if (offset == 1)
-			offset = 6; // 7
-		else
-			offset -= 2; // 1
-		offset += 7; // index 1 dnia miesiaca
-
-		Component j = calendar.getDayChooser().getDayPanel().getComponent(offset);
+		JButton j = getDayButton(calendar, 1);
 		j.setBackground(c);
 
 		// TODO eee reszta kodu
@@ -206,6 +195,49 @@ public class Operations {
 		// 49 = 7(decoration) + hidden(x1) + (28/30/31 monthDays) + hidden(x2)
 //		for(int i=0; i<49 ; ++i)
 //			System.out.println(j.getComponent(i));
+	}
+
+	/**
+	 * Zwraca JButton okreœlonego dnia miesi¹ca z Kalendarza.
+	 * 
+	 * @param calendar Kalendarz, obiekt klasy JCalendar
+	 * @param day Dzieñ miesiaca
+	 * @return JButton okreœlonego dania miesiaca
+	 */
+	public static JButton getDayButton(JCalendar calendar, int day) {
+		String input = "1/" + (calendar.getMonthChooser().getMonth() + 1) + "/" + calendar.getYearChooser().getYear();
+		Calendar temp = Calendar.getInstance();
+		temp.setTime(Operations.parseStringToDate(input, "d/M/yyyy"));
+		int offset = temp.get(Calendar.DAY_OF_WEEK); // 1==nd
+		if (offset == 1) // jesli niedziela(==1) to 6 buttonow przed nia nieaktywnych
+			offset = 6;
+		else			 // jesli pon(==2) to 0 buttonow przed nia nieaktywnych
+			offset -= 2; 
+		offset += 6;	 // 7 buttonow nieaktywnych wyswietlajacych dni tygonia
+						 // ustawiamy na ostatnim bo jesli day==1 to
+		if(day < 1) day = 1;
+		
+		int daysInCurrentMonth = 1;
+		switch(calendar.getMonthChooser().getMonth() + 1) {
+		case 2:
+			if(calendar.getYearChooser().getYear() % 4 == 0) daysInCurrentMonth = 29;
+			else daysInCurrentMonth = 28;
+			break;
+		case 4:
+		case 6:
+		case 9:
+		case 11:
+			daysInCurrentMonth = 30;
+			break;
+		default:
+			daysInCurrentMonth = 31;
+		}
+		
+		if(day > daysInCurrentMonth) day = daysInCurrentMonth;
+		offset += day;
+		
+		JButton j = (JButton) calendar.getDayChooser().getDayPanel().getComponent(offset);
+		return j;
 	}
 
 }

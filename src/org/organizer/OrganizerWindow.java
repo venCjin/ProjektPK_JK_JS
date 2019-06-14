@@ -44,6 +44,9 @@ public class OrganizerWindow {
 
 		JCalendar calendar = new JCalendar();
 		calendar.setTodayButtonVisible(true);
+		
+//		Operations.getDayButton(calendar, calendar.getDayChooser().getDay()).setBackground(new JButton().getBackground());
+		
 		calendar.getDayChooser().setAlwaysFireDayProperty(true);
 		calendar.getDayChooser().addPropertyChangeListener("day", new PropertyChangeListener() {
 			@Override
@@ -98,6 +101,7 @@ public class OrganizerWindow {
 		mntmDoBazySql.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO zapis do SQL
+				
 			}
 		});
 		mnZapisz.add(mntmDoBazySql);
@@ -106,6 +110,7 @@ public class OrganizerWindow {
 		mntmDoXml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO zapis do XML
+				
 			}
 		});
 		mnZapisz.add(mntmDoXml);
@@ -114,6 +119,7 @@ public class OrganizerWindow {
 		mntmDoCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO zapis do CSV
+				
 			}
 		});
 		mnZapisz.add(mntmDoCsv);
@@ -135,6 +141,7 @@ public class OrganizerWindow {
 		mntmZXml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO odczyt z XML (zapis do AllEvents oraz Searched)
+				
 				Operations.colorSearchedEvents(calendar, eventDayColor);
 			}
 		});
@@ -144,6 +151,7 @@ public class OrganizerWindow {
 		mntmZCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO odczyt z CSV (zapis do AllEvents oraz Searched)
+				
 				Operations.colorSearchedEvents(calendar, eventDayColor);
 			}
 		});
