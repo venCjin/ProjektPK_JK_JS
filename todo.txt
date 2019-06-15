@@ -8,7 +8,7 @@
 
 > okienko dnia ()
 	- logika (OK)
-	- gui (OK)
+	- gui (OK) (DayWindow)
 	- cli ()
 
 > alarm ()
@@ -22,8 +22,8 @@
 	- cli ()
 
 > usuń strsze niż ()
-	- logika ()
-	- gui ()
+	- logika (OK)
+	- gui (OK) (DeleteBeforeWindow)
 	- cli ()
 
 > ZAPIS DANYCH ()

@@ -1,7 +1,6 @@
 package org.organizer;
 
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import com.toedter.calendar.JDateChooser;
@@ -9,12 +8,15 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+/**
+ * Okno usuwania wydarzeñ dziej¹cych siê przed podan¹ dat¹. 
+ */
 public class DeleteBeforeWindow {
 
 	private JFrame frame;
 
 	/**
-	 * 
+	 * Tworzy okno usuwania wydarzeñ.
 	 */
 	public static void show() {
 		EventQueue.invokeLater(new Runnable() {
@@ -29,15 +31,12 @@ public class DeleteBeforeWindow {
 		});
 	}
 
-	/**
-	 * 
-	 */
-	protected DeleteBeforeWindow() {
+	private DeleteBeforeWindow() {
 		initialize();
 	}
 
 	/**
-	 * 
+	 * Inicjalizuje zawartoœæ okna usuwania wydarzeñ.
 	 */
 	private void initialize() {
 		frame = new JFrame();

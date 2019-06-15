@@ -153,14 +153,14 @@ public class Operations {
 			throw new EventError("Data rozpoczecia wydarzenia musi byc przed jego zakonczeniem.");
 
 		// TODO sprawdziæ bo coœ mi nie pasi
-		for (int i = 0; i < Data.AllEvents.size(); i++) {
-			if (startDate.after(Data.AllEvents.get(i).startDate) && startDate.before(Data.AllEvents.get(i).endDate))
+		for (Event e : Data.AllEvents) {
+			if (startDate.after(e.startDate) && endDate.before(e.endDate))
 				throw new EventError("Nowe wydarzenie odbywa siê w trakcie innego.");
 
-			if (startDate.before(Data.AllEvents.get(i).endDate))
+			if (startDate.before(e.endDate) && endDate.after(e.endDate))
 				throw new EventError("Nowe wydarzenie zaczyna siê przed zakoñczeniem poprzedniego.");
 
-			if (endDate.after(Data.AllEvents.get(i).startDate))
+			if (endDate.after(e.startDate) && startDate.before(e.startDate))
 				throw new EventError("Nowe wydarzenie koñczy siê po rozpoczêciu nastêpnego.");
 		}
 
@@ -175,13 +175,15 @@ public class Operations {
 	 * @return Lista wydarzeñ danego dnia
 	 */
 	public static List<Event> getEventsForDay(Date day) {
+		if (day == null)
+			return null;
 		List<Event> dayEvents = new ArrayList<Event>();
 		for (Event e : Data.AllEvents) {
 			if (e.endDate.before(Operations.parseDate(day, 0, 0, 0)))
 				continue;
 			if (e.startDate.after(Operations.parseDate(day, 24, 59, 59)))
 				continue;
-			dayEvents.add(e); //przeazujemy przez referencjê ¿eby mo¿na by³o go pozniej edytowaæ lub usunac
+			dayEvents.add(e); // przekazujemy przez referencjê ¿eby mo¿na by³o go pozniej edytowaæ lub usunac
 		}
 		return dayEvents;
 	}

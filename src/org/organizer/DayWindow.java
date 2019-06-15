@@ -1,5 +1,6 @@
 package org.organizer;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.EventQueue;
 import javax.swing.JButton;
@@ -18,17 +19,19 @@ import javax.swing.JOptionPane;
  */
 public class DayWindow {
 	private JFrame frame;
+	private Color searchedEventColor;
 
 	/**
 	 * Tworzy okno dnia.
 	 * 
 	 * @param day Dzieñ w formie tekstu
+	 * @param color Kolor wyszukanych wydarzeñ
 	 */
-	public static void show(String day) {
+	public static void show(String day, Color color) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DayWindow window = new DayWindow(day);
+					DayWindow window = new DayWindow(day, color);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,7 +40,8 @@ public class DayWindow {
 		});
 	}
 
-	protected DayWindow(String day) {
+	protected DayWindow(String day, Color color) {
+		this.searchedEventColor = color;
 		initialize(day);
 	}
 
@@ -55,29 +59,20 @@ public class DayWindow {
 
 		Date today = Operations.parseStringToDate(day, "dd-MM-yyyy");
 		int y, duration;
-		JLabel[] hours = new JLabel[24];
-		JLabel[] separators = new JLabel[24];
-		StringBuilder s = new StringBuilder("");
-
-		for (int i = 0; i < 24; ++i) {
-			if (i < 10)
-				s.append("0");
-			s.append(i).append(":00");
-			hours[i] = new JLabel(s.toString());
-			hours[i].setBounds(0, i * 26 - 7, 320, 26);
-
-			separators[i] = new JLabel("__________________________________");
-			separators[i].setBounds(0, i * 26 - 12 - 7, 320, 26);
-
-			frame.getContentPane().add(hours[i]);
-			frame.getContentPane().add(separators[i]);
-			s.setLength(0);
-		}
-
+		
 		List<Event> todayEvents = Operations.getEventsForDay(today);
 
 		for (Event e : todayEvents) {
 			JButton eventBtn = new JButton(e.getName());
+
+			//pokoloruj jesli byl wyszukany
+			for(Event se : Data.SearchedEvents) {
+				if(se.equals(e)) {
+					eventBtn.setBackground(this.searchedEventColor);
+					break;
+				}
+			}
+			
 			eventBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent btn) {
 					String[] options = new String[] { "OK", "USUÑ", "EDYTUJ" };
@@ -117,13 +112,33 @@ public class DayWindow {
 			else
 				duration = getButtonHeight(eH - sH, eM - sM);
 
-			eventBtn.setBounds(30, y, 210, duration);
+			eventBtn.setBounds(34, y, 200, duration);
 			frame.add(eventBtn);
+		}
+		
+		JLabel[] hours = new JLabel[24];
+		JLabel[] separators = new JLabel[24];
+		StringBuilder s = new StringBuilder("");
+
+		for (int i = 0; i < 24; ++i) {
+			if (i < 10)
+				s.append("0");
+			s.append(i).append(":00");
+			hours[i] = new JLabel(s.toString());
+			hours[i].setBounds(0, i * 26 - 7, 240, 26);
+
+			separators[i] = new JLabel("__________________________________");
+			separators[i].setBounds(0, i * 26 - 12 - 7, 240, 26);
+
+			frame.getContentPane().add(hours[i]);
+			frame.getContentPane().add(separators[i]);
+			s.setLength(0);
 		}
 	}
 
 	/**
 	 * Oblicza wysokoœæ przycisku Wydarzenia w oknie dnia
+	 * 
 	 * @param hours Iloœæ godzin trwania wydarzenia
 	 * @param minutes Iloœæ minut (dodatkowo ponad godziny)
 	 * @return Wysokosc dla przycisku w pikselach

@@ -8,6 +8,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.beans.PropertyChangeEvent;
@@ -18,29 +19,42 @@ import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 
+/**
+ * Organizer. G³ówne okno programu, wyœwietla kalendarz i menu. 
+ */
 public class OrganizerWindow {
-	/**
-	 * 
-	 */
-	JFrame window;
-	Color eventDayColor = Color.CYAN;
+	private JFrame frame;
+	private Color eventDayColor = Color.CYAN;
 
 	/**
-	 * Create the main application window.
+	 * Tworzy okno programu Organizera.
 	 */
-	public OrganizerWindow() {
+	public static void show() {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					OrganizerWindow window = new OrganizerWindow();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.getMessage();
+				}
+			}
+		});
+	}
+	
+	private OrganizerWindow() {
 		initialize();
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Inicjalizuje zawartoœæ okna Organizera.
 	 */
 	private void initialize() {
-		window = new JFrame("Organizer");
-		window.setBounds(350, 100, 438, 300);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.getContentPane().setLayout(null);
-		window.setResizable(false);
+		frame = new JFrame("Organizer");
+		frame.setBounds(350, 100, 438, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
 
 		JCalendar calendar = new JCalendar();
 		calendar.setTodayButtonVisible(true);
@@ -51,14 +65,14 @@ public class OrganizerWindow {
 		calendar.getDayChooser().addPropertyChangeListener("day", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				DayWindow.show(Operations.parseDateToString(calendar.getDate(), "dd-MM-yyyy"));
+				DayWindow.show(Operations.parseDateToString(calendar.getDate(), "dd-MM-yyyy"), eventDayColor);
 			}
 		});
 		calendar.setBounds(0, 0, 432, 250);
-		window.getContentPane().add(calendar);
+		frame.getContentPane().add(calendar);
 
 		JMenuBar menuBar = new JMenuBar();
-		window.setJMenuBar(menuBar);
+		frame.setJMenuBar(menuBar);
 
 		JMenu mnEvents = new JMenu("Wydarzenia");
 		menuBar.add(mnEvents);
@@ -186,6 +200,7 @@ public class OrganizerWindow {
 		mnInfo.add(mntmInfo);
 
 		// KEYBOARD
+		// TODO chyba do wyrzucenia bo jak kliknie siê dzieñ to lewo prawo zmiania równie¿ dni
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
 			public boolean dispatchKeyEvent(KeyEvent e) {
 				if (e.getID() == KeyEvent.KEY_PRESSED) {
