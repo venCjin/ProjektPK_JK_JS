@@ -166,7 +166,7 @@ public class AddEventWindow {
 				int impotranece = 0;
 				// TODO do Operations
 /*
-				Event event = null;
+				
 				try {
 					if (alarmChckbx.isSelected()) {
 						event = new Event(name, desc, place,
@@ -176,12 +176,7 @@ public class AddEventWindow {
 										(int) endMinSpin.getValue(), 0),
 								Operations.parseDate(alarmChooser.getDate()), impotranece);
 					} else
-						event = new Event(name, desc, place,
-								Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
-										(int) startMinSpin.getValue(), 0),
-								Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
-										(int) endMinSpin.getValue(), 0),
-								null, impotranece);
+						
 					Operations.addEvent(event);
 //					System.out.println(event.toString());
 //					System.out.println(Data.AllEvents.toString());

@@ -1,0 +1,8 @@
+> wyszukaj Event 
+	- logika
+	- gui
+	- cli
+> okienko dnia
+> usuń strsze niż
+> ZAPIS I ODCZYT DANYCH
+> info o programie - cli

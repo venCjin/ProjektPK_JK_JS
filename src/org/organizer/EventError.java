@@ -1,7 +1,7 @@
 package org.organizer;
 
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+//import javax.swing.JFrame;
+//import javax.swing.JOptionPane;
 
 public class EventError extends Exception {
 	/**
@@ -14,11 +14,12 @@ public class EventError extends Exception {
 	}
 
 	/**
-	 * Konstruktor tworzacy okno dialogowe z opisem bledu w Wydazrzeniu.
+	 * Konstruktor tworzacy //okno dialogowe// z opisem bledu w Wydazrzeniu.
 	 * 
 	 * @param msg Wiadowosc z informacja o bledzie
 	 */
 	EventError(String msg) {
-		JOptionPane.showMessageDialog(new JFrame(), msg, "EventError", JOptionPane.ERROR_MESSAGE);
+//		JOptionPane.showMessageDialog(new JFrame(), msg, "EventError", JOptionPane.ERROR_MESSAGE);
+		super(msg);
 	}
 }

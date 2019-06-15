@@ -137,12 +137,28 @@ public class Operations {
 	 * @param e Wydarzenie do dodania
 	 * @throws EventError
 	 */
-	public static void addEvent(Event e) throws EventError {
+	
+	
+	/**
+	 * 
+	 * @param name Nazwa Wydarzenia
+	 * @param desc Opis Wydarzenia
+	 * @param place Miejsce 
+	 * @param startDate Data pocz¹tku Wydarzenia
+	 * @param endDate Data koñca Wydarzenia
+	 * @param alarmDate Data alarmu
+	 * @param importance Wa¿noœæ Wydarzenia
+	 * @throws EventError
+	 */
+	public static void addEvent(String name, String desc, String place, Date startDate, Date endDate, Date alarmDate,
+			int importance) throws EventError {
+		Event e = null;
+		e = new Event(name, desc, place, startDate, endDate, alarmDate, importance);
 
 		// TODO sprawdziæ bo coœ mi nie pasi
 		for (int i = 0; i < Data.AllEvents.size(); i++) {
 			if (e.startDate.after(Data.AllEvents.get(i).startDate) && e.startDate.before(Data.AllEvents.get(i).endDate))
-				throw new EventError("New event takes place during a old event");
+				throw new EventError("Nowe wydarzenie odbywa siê w trakcie innego.");
 			if (e.startDate.before(Data.AllEvents.get(i).endDate))
 				throw new EventError("Nowe wydarzenie zaczyna siê przed zakoñczeniem poprzedniego.");
 			if (e.endDate.after(Data.AllEvents.get(i).startDate))
@@ -201,7 +217,7 @@ public class Operations {
 	 * Zwraca JButton okreœlonego dnia miesi¹ca z Kalendarza.
 	 * 
 	 * @param calendar Kalendarz, obiekt klasy JCalendar
-	 * @param day Dzieñ miesiaca
+	 * @param day      Dzieñ miesiaca
 	 * @return JButton okreœlonego dania miesiaca
 	 */
 	public static JButton getDayButton(JCalendar calendar, int day) {
@@ -211,17 +227,20 @@ public class Operations {
 		int offset = temp.get(Calendar.DAY_OF_WEEK); // 1==nd
 		if (offset == 1) // jesli niedziela(==1) to 6 buttonow przed nia nieaktywnych
 			offset = 6;
-		else			 // jesli pon(==2) to 0 buttonow przed nia nieaktywnych
-			offset -= 2; 
-		offset += 6;	 // 7 buttonow nieaktywnych wyswietlajacych dni tygonia
-						 // ustawiamy na ostatnim bo jesli day==1 to
-		if(day < 1) day = 1;
-		
+		else // jesli pon(==2) to 0 buttonow przed nia nieaktywnych
+			offset -= 2;
+		offset += 6; // 7 buttonow nieaktywnych wyswietlajacych dni tygonia
+						// ustawiamy na ostatnim bo jesli day==1 to
+		if (day < 1)
+			day = 1;
+
 		int daysInCurrentMonth = 1;
-		switch(calendar.getMonthChooser().getMonth() + 1) {
+		switch (calendar.getMonthChooser().getMonth() + 1) {
 		case 2:
-			if(calendar.getYearChooser().getYear() % 4 == 0) daysInCurrentMonth = 29;
-			else daysInCurrentMonth = 28;
+			if (calendar.getYearChooser().getYear() % 4 == 0)
+				daysInCurrentMonth = 29;
+			else
+				daysInCurrentMonth = 28;
 			break;
 		case 4:
 		case 6:
@@ -232,10 +251,11 @@ public class Operations {
 		default:
 			daysInCurrentMonth = 31;
 		}
-		
-		if(day > daysInCurrentMonth) day = daysInCurrentMonth;
+
+		if (day > daysInCurrentMonth)
+			day = daysInCurrentMonth;
 		offset += day;
-		
+
 		JButton j = (JButton) calendar.getDayChooser().getDayPanel().getComponent(offset);
 		return j;
 	}

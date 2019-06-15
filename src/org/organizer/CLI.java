@@ -82,20 +82,9 @@ public class CLI {
 				showGUI();
 			}
 		}
-		// klasa CLI lub ca³y kod tutaj
-
-		// TODO Warstwa Logki
-		/*
-		 * Logic.RingAllAlerts();
-		 */
-
-		// TESTS AND SHIT
-		// Instantiate a Date object
-		/*
-		 * Date date = new Date(); SimpleDateFormat dateFormat = new
-		 * SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		 * System.out.println("Today's date is: "+dateFormat.format(date));
-		 */
+		
+		
+		
 	}
 
 }
