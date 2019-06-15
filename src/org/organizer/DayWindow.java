@@ -2,7 +2,6 @@ package org.organizer;
 
 import java.awt.Component;
 import java.awt.EventQueue;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.awt.event.ActionEvent;
@@ -10,16 +9,20 @@ import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+/**
+ * Okno dnia. Wyœwietla wszystkie wydarzenia trwaj¹ce w ci¹gu tego dnia.
+ * Pozwala usuwaæ i edytowaæ wydarzenia.
+ */
 public class DayWindow {
-
 	private JFrame frame;
 
 	/**
-	 * TODO javadoc
+	 * Tworzy okno dnia.
+	 * 
+	 * @param day Dzieñ w formie tekstu
 	 */
 	public static void show(String day) {
 		EventQueue.invokeLater(new Runnable() {
@@ -34,15 +37,14 @@ public class DayWindow {
 		});
 	}
 
-	/**
-	 * TODO javadoc
-	 */
 	protected DayWindow(String day) {
 		initialize(day);
 	}
 
 	/**
-	 * TODO javadoc
+	 * Inicjalizuje zawartoœæ okna dnia.
+	 * 
+	 * @param day Dzieñ w formie tekstu
 	 */
 	private void initialize(String day) {
 		frame = new JFrame(day);
@@ -120,6 +122,12 @@ public class DayWindow {
 		}
 	}
 
+	/**
+	 * Oblicza wysokoœæ przycisku Wydarzenia w oknie dnia
+	 * @param hours Iloœæ godzin trwania wydarzenia
+	 * @param minutes Iloœæ minut (dodatkowo ponad godziny)
+	 * @return Wysokosc dla przycisku w pikselach
+	 */
 	private int getButtonHeight(int hours, int minutes) {
 		return hours * 26 + (int) ((float) minutes * 26f / 60f); // 26px = 1h
 	}
