@@ -114,8 +114,8 @@ public class OrganizerWindow {
 		mntmDoBazySql.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		mntmDoBazySql.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO zapis do SQL
-				
+				SQLData sql = new SQLData();
+				sql.writeAllEventsSQL(Data.AllEvents);
 			}
 		});
 		mnZapisz.add(mntmDoBazySql);
@@ -144,9 +144,10 @@ public class OrganizerWindow {
 		JMenuItem mntmZBazySql = new JMenuItem("z bazy SQL");
 		mntmZBazySql.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO odczyt z SQL (zapis do AllEvents oraz Searched)
-
-				Operations.colorSearchedEvents(calendar, eventDayColor);
+				// TODO odczyt z SQL (zapis do AllEvents)
+				SQLData sql = new SQLData();
+				Data.AllEvents = sql.readAllEventsSQL();
+//				Operations.colorSearchedEvents(calendar, eventDayColor);
 			}
 		});
 		mnWczytaj.add(mntmZBazySql);

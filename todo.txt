@@ -27,12 +27,12 @@
 	- cli ()
 
 > ZAPIS DANYCH ()
-	- sql ()
+	- sql (OK)
 	- xml ()
 	- csv ()
 
 > ODCZYT DANYCH ()
-	- sql ()
+	- sql (OK)
 	- xml ()
 	- csv ()
 

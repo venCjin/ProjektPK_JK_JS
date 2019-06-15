@@ -5,11 +5,11 @@ import java.util.Scanner;
 
 public class CLI {
 
-	static boolean isGUI = false;
+//	static boolean isGUI = false;
 	static Scanner terminal = new Scanner(System.in);
 
 	/**
-	 * Dodaje nowe wydarzenie.
+	 * Terminalowe menu do dodawania nowego wydarzenia.
 	 */
 	private static void add() {
 		String name = null;
@@ -62,14 +62,21 @@ public class CLI {
 	}
 
 	/**
-	 * Wyszukuje wydarzenia zawieracjace podan¹ fraze.
+	 * Terminalowe menu do wyszukiwania wydarzeñ zawieracjacych podan¹ fraze.
 	 */
 	private static void search() { // TODO wyszukaj
 
 	}
 
 	/**
-	 * Wyœwietla wszystkie wydarzenia trwaj¹ce danego dnia.
+	 * Terminalowe menu do usuwania wydarzeñ starszych niz podana data.
+	 */
+	private static void delBefore() { // TODO usun starsze
+		
+	}
+	
+	/**
+	 * Terminalowe menu do wyœwietlania wszystkich wydarzeñ trwaj¹cych danego dnia.
 	 */
 	private static void showDay() {
 		String data = null;
@@ -94,20 +101,78 @@ public class CLI {
 	}
 
 	/**
+	 * Terminalowe menu do zapisu wydarzeñ.
+	 */
+	private static void save() {
+		int option;
+		System.out.println("Gdzie chcesz wyeksportowaæ dane?");
+		System.out.println("[1] baza danych SQL");
+		System.out.println("[2] plik XML");
+		System.out.println("[3] plik CSV");
+		option = terminal.nextInt();
+		
+		switch(option) {
+		case 1:
+			SQLData sql = new SQLData();
+			sql.writeAllEventsSQL(Data.AllEvents);
+			break;
+		case 2:
+			// TODO xml
+			
+			break;
+		case 3:
+			// TODO csv
+			
+			break;
+		default:
+			System.out.println("B³êdna opcja");
+		}
+	}
+	
+	/**
+	 * Terminalowe menu do wczytywania wydarzeñ.
+	 */
+	private static void load() {
+		int option;
+		System.out.println("Sk¹d chcesz zaimportowaæ dane?");
+		System.out.println("[1] baza danych SQL");
+		System.out.println("[2] plik XML");
+		System.out.println("[3] plik CSV");
+		option = terminal.nextInt();
+		
+		switch(option) {
+		case 1:
+			SQLData sql = new SQLData();
+			Data.AllEvents = sql.readAllEventsSQL();
+			break;
+		case 2:
+			// TODO xml
+			
+			break;
+		case 3:
+			// TODO csv
+			
+			break;
+		default:
+			System.out.println("B³êdna opcja");
+		}
+	}
+	
+	/**
 	 * Wyœwietla help na konsoli.
 	 */
 	private static void printHelp() { // TODO help
 		System.out.println("Dostepne komendy:");
 		System.out.println("> dodaj"); // ok
 		System.out.println("> wyszukaj");
+		System.out.println("> usunStarsze");
 		System.out.println("> pokazDzien");
-		System.out.println("> ");
-		System.out.println("> ");
-		System.out.println("> ");
-		System.out.println("> ");
+		System.out.println("> zapisz");
+		System.out.println("> wczytaj");
+		System.out.println("> info");
 		System.out.println("> help");
-		if (!isGUI)
-			System.out.println("> gui");
+//		if (!isGUI)
+//			System.out.println("> gui");
 	}
 	
 	/**
@@ -125,20 +190,20 @@ public class CLI {
 			search();
 			break;
 			
+		case "usunStarsze":
+			delBefore();
+			break;
+			
 		case "pokazDzien":
 			showDay();
 			break;
 
-		case "dunno":
-
+		case "zapisz":
+			save();
 			break;
 			
-		case "gui":
-			if (!isGUI) {
-				showGUI();
-				System.out.println("Uruchmiam GUI\n");
-			} else
-				System.out.println("GUI jest ju¿ w³¹czone!\n");
+		case "wczytaj":
+			load();
 			break;
 			
 		case "info":
@@ -152,6 +217,14 @@ public class CLI {
 		case "exit":
 			return;
 			
+//		case "gui":
+//			if (!isGUI) {
+//				showGUI();
+//				System.out.println("Uruchmiam GUI\n");
+//			} else
+//				System.out.println("GUI jest ju¿ w³¹czone!\n");
+//			break;
+			
 		default:
 			System.out.println("Nie znaleziono polecenia: " + cmd + "\n");
 			printHelp();
@@ -161,9 +234,9 @@ public class CLI {
 	/**
 	 * Wyœwietla interfejs okienkowy / GUI
 	 */
-	private static void showGUI() {
-		OrganizerWindow.show();
-	}
+//	private static void showGUI() {
+//		OrganizerWindow.show();
+//	}
 
 	/**
 	 * Uruchamia program z argumentami lub bez
