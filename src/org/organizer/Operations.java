@@ -1,6 +1,7 @@
 package org.organizer;
 
 import java.awt.Color;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,8 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 
 import com.toedter.calendar.JCalendar;
 
@@ -28,10 +27,16 @@ public class Operations {
 			SimpleDateFormat out = new SimpleDateFormat(p);
 			date = out.parse(d);
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			// wzorzec jest niepoprwany
+			e.getMessage();
 			date = null;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (ParseException e) {
+			// nie uda³o siê przetworzyc na date, pewni String data nie poprawny
+			e.getMessage();
+			date = null;
+		} catch (NullPointerException e) {
+			// nie uda³o siê przetworzyc na date, pewni String data nie poprawny
+			e.getMessage();
 			date = null;
 		}
 		return date;
@@ -42,18 +47,20 @@ public class Operations {
 	 * 
 	 * @param d Data
 	 * @param p Wzorzec formatu daty
-	 * @return String daty w podanym formacie
+	 * @return Datê w formie tekstu w podanym formacie lub null dla niepoprwnej daty
 	 */
 	public static String parseDateToString(Date d, String p) {
 		String date = null;
 		try {
 			SimpleDateFormat out = new SimpleDateFormat(p);
-			date = out.format(d);
+			date = out.format(d).toString();
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			// wzorzec jest niepoprwany
+			e.getMessage();
 			date = null;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (NullPointerException e) {
+			// data jest nullem
+			e.getMessage();
 			date = null;
 		}
 		return date;
@@ -63,7 +70,7 @@ public class Operations {
 	 * Scala podana date z czasem 00:00:00.
 	 * 
 	 * @param d Data wejsciowa
-	 * @return Data w formacie "dd-MM-yyyy 00:00:00"
+	 * @return Data w formacie "dd-MM-yyyy 00:00:00" lub null dla niepoprwnej daty
 	 */
 	public static Date parseDate(Date d) {
 		return parseDate(d, 0, 0, 0);
@@ -76,13 +83,16 @@ public class Operations {
 	 * @param h Godziny
 	 * @param m Minuty
 	 * @param s Sekundy
-	 * @return Data w formacie "dd-MM-yyyy HH:mm:ss"
+	 * @return Data w formacie "dd-MM-yyyy HH:mm:ss" lub null dla niepoprwnej daty
 	 */
 	public static Date parseDate(Date d, int h, int m, int s) {
 		SimpleDateFormat in = new SimpleDateFormat("dd-MM-yyyy");
 		SimpleDateFormat out = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		StringBuilder buf = new StringBuilder("");
 		Date date = null;
+
+		if (d == null)
+			return date;
 
 		try {
 			buf.append(in.format(d));
@@ -108,7 +118,7 @@ public class Operations {
 //			System.out.println("end: " + buf.toString());
 			date = out.parse(buf.toString());
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 			date = null;
 		}
 		return date;
@@ -118,13 +128,10 @@ public class Operations {
 	 * Usuwa Wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹.
 	 * 
 	 * @param d Data
+	 * @throws EventError
 	 */
 	public static void deleteEventsBefore(Date d) {
 		Date del = Operations.parseDate(d);
-		if (del == null) {
-			JOptionPane.showMessageDialog(new JFrame(), "Niepoprawna data.", "EventError", JOptionPane.ERROR_MESSAGE);
-//			return 
-		}
 		for (Event e : Data.AllEvents)
 			if (e.endDate.before(del))
 				Data.AllEvents.remove(e);
@@ -137,34 +144,46 @@ public class Operations {
 	 * @param e Wydarzenie do dodania
 	 * @throws EventError
 	 */
-	
-	
+
 	/**
 	 * 
-	 * @param name Nazwa Wydarzenia
-	 * @param desc Opis Wydarzenia
-	 * @param place Miejsce 
-	 * @param startDate Data pocz¹tku Wydarzenia
-	 * @param endDate Data koñca Wydarzenia
-	 * @param alarmDate Data alarmu
+	 * @param name       Nazwa Wydarzenia
+	 * @param desc       Opis Wydarzenia
+	 * @param place      Miejsce Wydarzenia
+	 * @param startDate  Data pocz¹tku Wydarzenia
+	 * @param endDate    Data koñca Wydarzenia
+	 * @param alarmDate  Data alarmu
 	 * @param importance Wa¿noœæ Wydarzenia
 	 * @throws EventError
 	 */
 	public static void addEvent(String name, String desc, String place, Date startDate, Date endDate, Date alarmDate,
 			int importance) throws EventError {
-		Event e = null;
-		e = new Event(name, desc, place, startDate, endDate, alarmDate, importance);
+
+		if (name == "" || name == null || name.isEmpty())
+			throw new EventError("Pusta nazwa");
+
+		if (startDate == null)
+			throw new EventError("Nieprawid³owa data rozpoczecia wydarzenia.");
+
+		if (endDate == null)
+			throw new EventError("Nieprawid³owa data zakonczenia wydarzenia.");
+
+		if (endDate.before(startDate))
+			throw new EventError("Data rozpoczecia wydarzenia musi byc przed jego zakonczeniem.");
 
 		// TODO sprawdziæ bo coœ mi nie pasi
 		for (int i = 0; i < Data.AllEvents.size(); i++) {
-			if (e.startDate.after(Data.AllEvents.get(i).startDate) && e.startDate.before(Data.AllEvents.get(i).endDate))
+			if (startDate.after(Data.AllEvents.get(i).startDate) && startDate.before(Data.AllEvents.get(i).endDate))
 				throw new EventError("Nowe wydarzenie odbywa siê w trakcie innego.");
-			if (e.startDate.before(Data.AllEvents.get(i).endDate))
+
+			if (startDate.before(Data.AllEvents.get(i).endDate))
 				throw new EventError("Nowe wydarzenie zaczyna siê przed zakoñczeniem poprzedniego.");
-			if (e.endDate.after(Data.AllEvents.get(i).startDate))
+
+			if (endDate.after(Data.AllEvents.get(i).startDate))
 				throw new EventError("Nowe wydarzenie koñczy siê po rozpoczêciu nastêpnego.");
 		}
-		Data.AllEvents.add(e);
+
+		Data.AllEvents.add(new Event(name, desc, place, startDate, endDate, alarmDate, importance));
 		sortDate();
 	}
 
@@ -194,7 +213,23 @@ public class Operations {
 				Data.SearchedEvents.add(e);
 	}
 
-	/* Metody obs³uguj¹ce GUI */
+	public static String info() {
+		return "ORGANIZER\nProgram stworzony na laboratoriach Programowania Komponentowego\nAutorzy: Jakub Klepacz, Jaros³aw Suchiñski";
+	}
+	
+	/*
+	 * Metody obs³uguj¹ce GUI
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 * 
+	 */
 	/**
 	 * Koloruje na wybrany kolor dni, w których s¹ wyszukane wydarzenia.
 	 * 

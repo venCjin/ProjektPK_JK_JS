@@ -2,6 +2,7 @@ package org.organizer;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JCheckBox;
 
 import java.awt.EventQueue;
@@ -13,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
@@ -161,30 +163,26 @@ public class AddEventWindow {
 				String name = nameField.getText();
 				String desc = descField.getText();
 				String place = placeField.getText();
+				Date alarmDate = null;
 
 				// TODO importance
 				int impotranece = 0;
 				// TODO do Operations
-/*
-				
+
 				try {
-					if (alarmChckbx.isSelected()) {
-						event = new Event(name, desc, place,
-								Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
-										(int) startMinSpin.getValue(), 0),
-								Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
-										(int) endMinSpin.getValue(), 0),
-								Operations.parseDate(alarmChooser.getDate()), impotranece);
-					} else
+					if (alarmChckbx.isSelected()) alarmDate = Operations.parseDate(alarmChooser.getDate());
 						
-					Operations.addEvent(event);
-//					System.out.println(event.toString());
+					Operations.addEvent(name, desc, place,
+							Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
+									(int) startMinSpin.getValue(), 0),
+							Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
+									(int) endMinSpin.getValue(), 0),
+							alarmDate, impotranece);
 //					System.out.println(Data.AllEvents.toString());
 					frame.dispose();
-				} catch (EventError e1) {
-					e1.printStackTrace();
+				} catch (EventError err) {
+					JOptionPane.showMessageDialog(new JFrame(), err.getMessage(), "EventError", JOptionPane.ERROR_MESSAGE);
 				}
-*/
 			}
 		});
 		btnOk.setBounds(356, 237, 68, 23);

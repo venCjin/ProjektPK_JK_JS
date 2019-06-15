@@ -37,27 +37,15 @@ public class Event implements Comparable<Event>, Serializable {
 	 * @param endDate     Data zakonczenia wydarzenia
 	 * @param alarmDate   Data alarmu wydarzenia
 	 * @param importance  Waznosc wydarzenia
-	 * @throws EventError Okienko dialogowe. Pokazuje sie jezeli wymagany atrybut
-	 *                    jest pusty.
 	 */
-	public Event(String name, String description, String place, Date dataRozp, Date endDate, Date alarmDate,
-			int importance) throws EventError {
+	public Event(String name, String description, String place, Date startDate, Date endDate, Date alarmDate,
+			int importance) {
 		super();
-		if (name == "" || name == null || name.isEmpty())
-			throw new EventError("Pusta nazwa");
 		this.name = name;
 		this.description = description;
 		this.place = place;
-
-		if (dataRozp == null)
-			throw new EventError("Nieprawid³owa data rozpoczecia wydarzenia");
-		this.startDate = dataRozp;
-		if (endDate == null)
-			throw new EventError("Nieprawid³owa data zakonczenia wydarzenia");
+		this.startDate = startDate;
 		this.endDate = endDate;
-		if (endDate.before(dataRozp))
-			throw new EventError("Data rozpoczecia wydarzenia musi byc przed jego zakonczeniem");
-
 		this.alarmDate = alarmDate;
 		this.importance = importance;
 	}

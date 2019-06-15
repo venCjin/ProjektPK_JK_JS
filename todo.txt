@@ -1,8 +1,34 @@
-> wyszukaj Event 
-	- logika
-	- gui
-	- cli
-> okienko dnia
-> usuń strsze niż
-> ZAPIS I ODCZYT DANYCH
-> info o programie - cli
+> dodawanie Eventow (OK)
+	- gui (OK)
+	- cli (OK)
+
+> alarm ()
+	- logika ()
+	- gui ()
+	- cli ()
+
+> wyszukaj Eventy ()
+	- logika ()
+	- gui ()
+	- cli ()
+
+> okienko dnia ()
+
+> usuń strsze niż ()
+	- logika ()
+	- gui ()
+	- cli ()
+
+> ZAPIS DANYCH ()
+	- sql ()
+	- xml ()
+	- csv ()
+
+> ODCZYT DANYCH ()
+	- sql ()
+	- xml ()
+	- csv ()
+
+> info o programie (OK)
+	- cli (OK)
+	- gui (OK)

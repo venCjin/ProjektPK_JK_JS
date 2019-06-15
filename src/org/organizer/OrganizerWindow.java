@@ -179,7 +179,7 @@ public class OrganizerWindow {
 		mntmInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null,
-						"ORGANIZER\nProgram stworzony na laboratoriach Programowania Komponentowego\nAutorzy: Jakub Klepacz, Jaros³aw Suchiñski",
+						Operations.info(),
 						"Informacje o programie", 1);
 			}
 		});

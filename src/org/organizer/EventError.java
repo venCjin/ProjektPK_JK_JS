@@ -19,7 +19,6 @@ public class EventError extends Exception {
 	 * @param msg Wiadowosc z informacja o bledzie
 	 */
 	EventError(String msg) {
-//		JOptionPane.showMessageDialog(new JFrame(), msg, "EventError", JOptionPane.ERROR_MESSAGE);
 		super(msg);
 	}
 }
