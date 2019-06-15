@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JButton;
 
@@ -125,27 +126,7 @@ public class Operations {
 	}
 
 	/**
-	 * Usuwa Wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹.
-	 * 
-	 * @param d Data
-	 * @throws EventError
-	 */
-	public static void deleteEventsBefore(Date d) {
-		Date del = Operations.parseDate(d);
-		for (Event e : Data.AllEvents)
-			if (e.endDate.before(del))
-				Data.AllEvents.remove(e);
-		Data.SearchedEvents = new ArrayList<>(Data.AllEvents);
-	}
-
-	/**
 	 * Dodaje nowe Wydarzenie i sprawdza czy juz nie ma wtedy innego Wydarzenia
-	 * 
-	 * @param e Wydarzenie do dodania
-	 * @throws EventError
-	 */
-
-	/**
 	 * 
 	 * @param name       Nazwa Wydarzenia
 	 * @param desc       Opis Wydarzenia
@@ -188,6 +169,43 @@ public class Operations {
 	}
 
 	/**
+	 * Zwraca listê Wydarzeñ dla danego dnia.
+	 * 
+	 * @param day Data dnia w formacie "dd-MM-yyyy"
+	 * @return Lista wydarzeñ danego dnia
+	 */
+	public static List<Event> getEventsForDay(Date day) {
+		List<Event> dayEvents = new ArrayList<Event>();
+		for (Event e : Data.AllEvents) {
+			if (e.endDate.before(Operations.parseDate(day, 0, 0, 0)))
+				continue;
+			if (e.startDate.after(Operations.parseDate(day, 24, 59, 59)))
+				continue;
+			dayEvents.add(e); //przeazujemy przez referencjê ¿eby mo¿na by³o go pozniej edytowaæ lub usunac
+		}
+		return dayEvents;
+	}
+
+	public static void deleteEvent(Event e) {
+		Data.AllEvents.remove(e);
+//		Data.SearchedEvents.remove(e);
+	}
+
+	/**
+	 * Usuwa Wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹.
+	 * 
+	 * @param d Data
+	 * @throws EventError
+	 */
+	public static void deleteEventsBefore(Date d) {
+		Date del = Operations.parseDate(d);
+		for (Event e : Data.AllEvents)
+			if (e.endDate.before(del))
+				Data.AllEvents.remove(e);
+		Data.SearchedEvents = new ArrayList<>(Data.AllEvents);
+	}
+
+	/**
 	 * Sortuje Wydarzenia po dacie
 	 */
 	public static void sortDate() {
@@ -204,19 +222,19 @@ public class Operations {
 	/**
 	 * Wyszukuje Wydarzenia, które maj¹ w nazwie podan¹ frazê.
 	 * 
-	 * @param p Fraza do wyszukania
+	 * @param phrase Fraza do wyszukania
 	 */
-	public static void searchEvents(String p) {
+	public static void searchEvents(String phrase) {
 		Data.SearchedEvents.clear();
 		for (Event e : Data.AllEvents)
-			if (e.getName().contains(p))
+			if (e.getName().contains(phrase))
 				Data.SearchedEvents.add(e);
 	}
 
 	public static String info() {
 		return "ORGANIZER\nProgram stworzony na laboratoriach Programowania Komponentowego\nAutorzy: Jakub Klepacz, Jaros³aw Suchiñski";
 	}
-	
+
 	/*
 	 * Metody obs³uguj¹ce GUI
 	 * 

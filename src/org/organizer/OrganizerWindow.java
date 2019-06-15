@@ -37,7 +37,7 @@ public class OrganizerWindow {
 	 */
 	private void initialize() {
 		window = new JFrame("Organizer");
-		window.setBounds(100, 100, 438, 300);
+		window.setBounds(350, 100, 438, 300);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.getContentPane().setLayout(null);
 		window.setResizable(false);

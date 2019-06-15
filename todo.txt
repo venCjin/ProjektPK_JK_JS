@@ -1,6 +1,15 @@
+> info o programie (OK)
+	- cli (OK)
+	- gui (OK)
+
 > dodawanie Eventow (OK)
 	- gui (OK)
 	- cli (OK)
+
+> okienko dnia ()
+	- logika (OK)
+	- gui (OK)
+	- cli ()
 
 > alarm ()
 	- logika ()
@@ -11,8 +20,6 @@
 	- logika ()
 	- gui ()
 	- cli ()
-
-> okienko dnia ()
 
 > usuń strsze niż ()
 	- logika ()
@@ -29,6 +36,4 @@
 	- xml ()
 	- csv ()
 
-> info o programie (OK)
-	- cli (OK)
-	- gui (OK)
+

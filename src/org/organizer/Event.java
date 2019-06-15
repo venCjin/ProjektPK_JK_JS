@@ -217,9 +217,9 @@ public class Event implements Comparable<Event>, Serializable {
 			alarm = Operations.parseDateToString(alarmDate,"dd-MM-yyyy");
 		else
 			alarm = "(nie ustawiono)";
-		return "Wydarzenie [nazwa=" + name + ", opis=" + description + ", miejsce=" + place + 
-				", data rozpoczecia=" + Operations.parseDateToString(startDate,"dd-MM-yyyy HH:mm:ss")
-				+ ", data zakonczenia=" + Operations.parseDateToString(endDate,"dd-MM-yyyy HH:mm:ss")
-				+ ", data alarmu=" + alarm + ", waznosc=" + importance + "]";
+		return "Nazwa: " + name + ", opis: " + description + ", miejsce: " + place + 
+				", data rozpoczecia: " + Operations.parseDateToString(startDate,"dd-MM-yyyy HH:mm:ss")
+				+ ", data zakonczenia: " + Operations.parseDateToString(endDate,"dd-MM-yyyy HH:mm:ss")
+				+ ", data alarmu: " + alarm + ", waznosc: " + importance;
 	}
 }
