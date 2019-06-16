@@ -152,13 +152,13 @@ public class Operations {
 			throw new EventException("Data rozpoczecia wydarzenia musi byc przed jego zakonczeniem.");
 
 		for (Event e : Data.AllEvents) {
-			if (startDate.after(e.startDate) && endDate.before(e.endDate))
+			if (startDate.after(e.getStartDate()) && endDate.before(e.getEndDate()))
 				throw new EventException("Nowe wydarzenie odbywa siê w trakcie innego.");
 
-			if (startDate.before(e.endDate) && endDate.after(e.endDate))
+			if (startDate.before(e.getEndDate()) && endDate.after(e.getEndDate()))
 				throw new EventException("Nowe wydarzenie zaczyna siê przed zakoñczeniem poprzedniego.");
 
-			if (endDate.after(e.startDate) && startDate.before(e.startDate))
+			if (endDate.after(e.getStartDate()) && startDate.before(e.getStartDate()))
 				throw new EventException("Nowe wydarzenie koñczy siê po rozpoczêciu nastêpnego.");
 		}
 
@@ -177,9 +177,9 @@ public class Operations {
 			return null;
 		List<Event> dayEvents = new ArrayList<Event>();
 		for (Event e : Data.AllEvents) {
-			if (e.endDate.before(Operations.parseDate(day, 0, 0, 0)))
+			if (e.getEndDate().before(Operations.parseDate(day, 0, 0, 0)))
 				continue;
-			if (e.startDate.after(Operations.parseDate(day, 24, 59, 59)))
+			if (e.getStartDate().after(Operations.parseDate(day, 24, 59, 59)))
 				continue;
 			dayEvents.add(e); // przekazujemy przez referencjê ¿eby mo¿na by³o go pozniej edytowaæ lub usunac
 		}
@@ -202,7 +202,7 @@ public class Operations {
 		if (del == null)
 			throw new DateTimeException("Niepoprawna data.");
 		for (Event e : Data.AllEvents)
-			if (e.endDate.before(del))
+			if (e.getEndDate().before(del))
 				Data.AllEvents.remove(e);
 		Data.SearchedEvents = new ArrayList<>(Data.AllEvents);
 	}

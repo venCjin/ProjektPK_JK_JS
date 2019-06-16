@@ -14,9 +14,9 @@ public class Event implements Comparable<Event>, Serializable {
 	private String description;
 	private String place;
 
-	protected Date startDate;
-	protected Date endDate;
-	protected Date alarmDate;
+	private Date startDate;
+	private Date endDate;
+	private Date alarmDate;
 
 	/**
 	 * Konstruktor bezparametrowy wymagany do serializacji do i z formatu XML. lub
