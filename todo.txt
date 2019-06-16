@@ -7,15 +7,16 @@
 	- cli (OK)
 
 > okienko dnia ()
-	- logika (OK)
-	- gui (OK) (DayWindow)
-	- cli (OK)
-	> edycja wydarzenia
+|	- logika (OK)
+|	- gui (OK) (DayWindow)
+|	- cli (OK)
+|	> usuwanie wydarzenia
+|		- gui (OK) (DayWindow)
+|		- cli (OK)
+|	
+----> edycja wydarzenia
 		- gui () (EditEventWindow)
 		- cli ()
-	> usuwanie wydarzenia
-		- gui (OK) (DayWindow)
-		- cli (OK)	
 
 > alarm ()
 	- logika ()

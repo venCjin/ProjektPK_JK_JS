@@ -43,6 +43,7 @@ public class XMLData {
 	 * @return Lista wszystkich wydarzeñ zapisanych w pliku export.xml
 	 * @throws Exception 
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<Event> readXML() throws Exception {
 		List<Event> events = new ArrayList<Event>();
 		try {

@@ -1,56 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <java version="1.8.0_191" class="java.beans.XMLDecoder">
- <object class="org.organizer.Event">
-  <void property="alarmDate">
-   <object class="java.util.Date">
-    <long>1560641400000</long>
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="org.organizer.Event">
+    <void property="alarmDate">
+     <object class="java.util.Date">
+      <long>1560641400000</long>
+     </object>
+    </void>
+    <void property="description">
+     <string></string>
+    </void>
+    <void property="endDate">
+     <object class="java.util.Date">
+      <long>1560645000000</long>
+     </object>
+    </void>
+    <void property="name">
+     <string>1</string>
+    </void>
+    <void property="place">
+     <string></string>
+    </void>
+    <void property="startDate">
+     <object class="java.util.Date">
+      <long>1560639600000</long>
+     </object>
+    </void>
    </object>
   </void>
-  <void property="description">
-   <string></string>
-  </void>
-  <void property="endDate">
-   <object class="java.util.Date">
-    <long>1560645000000</long>
+  <void method="add">
+   <object class="org.organizer.Event">
+    <void property="description">
+     <string></string>
+    </void>
+    <void property="endDate">
+     <object class="java.util.Date">
+      <long>1560654000000</long>
+     </object>
+    </void>
+    <void property="name">
+     <string>2</string>
+    </void>
+    <void property="place">
+     <string></string>
+    </void>
+    <void property="startDate">
+     <object class="java.util.Date">
+      <long>1560646800000</long>
+     </object>
+    </void>
    </object>
   </void>
-  <void property="name">
-   <string>1</string>
-  </void>
-  <void property="place">
-   <string></string>
-  </void>
- </object>
- <object class="org.organizer.Event">
-  <void property="description">
-   <string></string>
-  </void>
-  <void property="endDate">
-   <object class="java.util.Date">
-    <long>1560654000000</long>
+  <void method="add">
+   <object class="org.organizer.Event">
+    <void property="description">
+     <string></string>
+    </void>
+    <void property="endDate">
+     <object class="java.util.Date">
+      <long>1560661860000</long>
+     </object>
+    </void>
+    <void property="name">
+     <string>3</string>
+    </void>
+    <void property="place">
+     <string></string>
+    </void>
+    <void property="startDate">
+     <object class="java.util.Date">
+      <long>1560654000000</long>
+     </object>
+    </void>
    </object>
-  </void>
-  <void property="name">
-   <string>2</string>
-  </void>
-  <void property="place">
-   <string></string>
-  </void>
- </object>
- <object class="org.organizer.Event">
-  <void property="description">
-   <string></string>
-  </void>
-  <void property="endDate">
-   <object class="java.util.Date">
-    <long>1560661860000</long>
-   </object>
-  </void>
-  <void property="name">
-   <string>3</string>
-  </void>
-  <void property="place">
-   <string></string>
   </void>
  </object>
 </java>

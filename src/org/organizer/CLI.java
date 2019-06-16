@@ -59,13 +59,22 @@ public class CLI {
 		} catch (EventException e) {
 			System.err.println(e.getMessage());
 		}
+		
+		System.out.println("Dodano wydarzenie.");
 	}
 
 	/**
 	 * Terminalowe menu do wyszukiwania wydarzeñ zawieracjacych podan¹ fraze.
 	 */
-	private static void search() { // TODO szukaj
-
+	private static void search() {
+		String phrase;
+		phrase = terminal.nextLine();
+		System.out.println("Podaj frazê do wyszukania w nazwie wydarzenia :");
+		System.out.print("fraza> "); phrase = terminal.nextLine();
+		
+		Operations.searchEvents(phrase);
+		
+		delOrEdit(Data.SearchedEvents, "Wyszukane wydarzenia:");
 	}
 
 	/**
@@ -94,70 +103,22 @@ public class CLI {
 
 		List<Event> dayEvents = Operations.getEventsForDay(Operations.parseStringToDate(date, "dd-MM-yyyy"));
 
-		while (true) {
-			if (dayEvents == null)
-				System.out.println("Nie ma wydarzeñ tego dnia.");
-			else {
-				System.out.println("Wydarzenia trwaj¹ce tego dnia: ");
-				int i = -1;
-				for (Event e : dayEvents) {
-					System.out.println("[" + ++i + "] " + e.toString());
-				}
-
-				System.out.println("Czy chcesz usun¹æ lub edytowaæ jedno z wydarzen?");
-				System.out.println("[u] - usun");
-				System.out.println("[e] - edytuj");
-				System.out.println("[q] - wyjdŸ");
-				System.out.print("opcja> "); date = terminal.next();
-
-				if (date.equals("q"))
-					return;
-				if (!date.equals("u") && !date.equals("e")) {
-					System.err.println("Niepoprawna opcja");
-					continue;
-				}
-
-				System.out.println("Podaj index wydarzenia [i]:");
-				System.out.print("index> "); i = terminal.nextInt();
-
-				Event e;
-				try {
-					e = dayEvents.get(i);
-				} catch (IndexOutOfBoundsException ex) {
-					System.err.print("Niepoprawny index.\n" + ex.getMessage());
-					continue;
-				}
-
-				switch (date) {
-				case "u":
-					Operations.deleteEvent(e);
-					dayEvents.remove(i);
-					System.out.println("Operacja zakoñczona powodzeniem.");
-					break;
-				case "e":
-					// TODO edit
-
-					break;
-//				default:
-//					System.err.println("Niepoprawna opcja");
-				}
-			}
-		}
+		delOrEdit(dayEvents, "Wydarzenia trwaj¹ce tego dnia:");
 	}
 
 	/**
 	 * Terminalowe menu do zapisu wydarzeñ.
 	 */
-	private static void save() { // TODO wyj¹tki
-		int option;
+	private static void save() {
+		String option;
 		System.out.println("Gdzie chcesz wyeksportowaæ dane?");
 		System.out.println("[1] baza danych SQL");
 		System.out.println("[2] plik XML");
 		System.out.println("[3] plik CSV");
-		System.out.print("opcja> "); option = terminal.nextInt();
+		System.out.print("opcja> "); option = terminal.next();
 
 		switch (option) {
-		case 1:
+		case "1":
 			SQLData sql = new SQLData();
 			try {
 				sql.deleteAllEventsSQL();
@@ -165,20 +126,23 @@ public class CLI {
 			} catch (SQLException e) {
 				System.err.println(e.getMessage());
 			}
+			System.out.println("Wyeksportowano do SQL.");
 			break;
-		case 2:
+		case "2":
 			try {
 				XMLData.writeXML(Data.AllEvents);
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
+			System.out.println("Wyeksportowano do XML.");
 			break;
-		case 3:
+		case "3":
 			try {
 				CSVData.writeCSV(Data.AllEvents);
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
+			System.out.println("Wyeksportowano do CSV.");
 			break;
 		default:
 			System.out.println("B³êdna opcja");
@@ -188,36 +152,39 @@ public class CLI {
 	/**
 	 * Terminalowe menu do wczytywania wydarzeñ.
 	 */
-	private static void load() { // TODO wyj¹tki
-		int option;
+	private static void load() {
+		String option;
 		System.out.println("Sk¹d chcesz zaimportowaæ dane?");
 		System.out.println("[1] baza danych SQL");
 		System.out.println("[2] plik XML");
 		System.out.println("[3] plik CSV");
-		System.out.print("opcja> "); option = terminal.nextInt();
+		System.out.print("opcja> "); option = terminal.next();
 
 		switch (option) {
-		case 1:
+		case "1":
 			SQLData sql = new SQLData();
 			try {
 				Data.AllEvents = sql.readAllEventsSQL();
 			} catch (SQLException e) {
 				System.err.println(e.getMessage());
 			}
+			System.out.println("Zaimportowano z SQL.");
 			break;
-		case 2:
+		case "2":
 			try {
 				Data.AllEvents = XMLData.readXML();
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
+			System.out.println("Zaimportowano z XML.");
 			break;
-		case 3:
+		case "3":
 			try {
 				Data.AllEvents = CSVData.readCSV();
 			} catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
+			System.out.println("Zaimportowano z CSV.");
 			break;
 		default:
 			System.out.println("B³êdna opcja");
@@ -230,15 +197,13 @@ public class CLI {
 	private static void printHelp() {
 		System.out.println("Dostepne komendy:");
 		System.out.println("> dodaj");
-		System.out.println("> wyszukaj");
+		System.out.println("> szukaj");
 		System.out.println("> usunStarsze");
 		System.out.println("> pokazDzien");
 		System.out.println("> zapisz");
 		System.out.println("> wczytaj");
 		System.out.println("> info");
 		System.out.println("> help");
-//		if (!isGUI)
-//			System.out.println("> gui");
 	}
 
 	/**
@@ -246,7 +211,7 @@ public class CLI {
 	 * 
 	 * @param cmd Komenda z konsoli
 	 */
-	public static void command(String cmd) {
+	private static void command(String cmd) {
 		switch (cmd) {
 		case "d":
 		case "dodaj":
@@ -298,7 +263,72 @@ public class CLI {
 		}
 	}
 
+	/**
+	 * Pozwala usuwaæ i edytowaæ wybrane wydarzenia z przekazanej listy.
+	 * 
+	 * @param events Lista wydarzeñ do edycji lub usuniecia
+	 * @param text Napis przed wyswietlan¹ list¹ wydarzeñ
+	 */
+	private static void delOrEdit(List<Event> events, String text) {
+		String option;
+		while (true) {
+			if (events.size() < 1) {
+				System.out.println("Nie ma wydarzeñ tego dnia.");
+				return;
+			} else {
+				System.out.println(text);
+				int i = -1;
+				for (Event e : events) {
+					System.out.println("[" + ++i + "] " + e.toString());
+				}
 
+				System.out.println("Czy chcesz usun¹æ lub edytowaæ jedno z wydarzen?");
+				System.out.println("[u] - usun");
+				System.out.println("[e] - edytuj");
+				System.out.println("[q] - wyjdŸ");
+				System.out.print("opcja> "); option = terminal.next();
+
+				if (option.equals("q"))
+					return;
+				if (!option.equals("u") && !option.equals("e")) {
+					System.err.println("Niepoprawna opcja");
+					continue;
+				}
+				
+				System.out.println("Podaj index wydarzenia [i]:");
+				System.out.print("index> ");
+				try {
+					i = terminal.nextInt();
+				} catch (Exception e) {
+					System.err.println("Niepoprawny index wydarzenia.");
+					continue;
+				}
+
+				Event e;
+				try {
+					e = events.get(i);
+				} catch (IndexOutOfBoundsException ex) {
+					System.err.print("Niepoprawny index.\n" + ex.getMessage());
+					continue;
+				}
+
+				switch (option) {
+				case "u":
+					Operations.deleteEvent(e);
+					events.remove(i);
+					System.out.println("Operacja zakoñczona powodzeniem.");
+					break;
+				case "e":
+					// TODO edit
+
+					break;
+				default:
+					System.err.println("Niepoprawna opcja");
+				}
+			}
+		}
+	}
+	
 	/**
 	 * Uruchamia program z argumentami
 	 * 
@@ -326,8 +356,21 @@ public class CLI {
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
-		Data.SearchedEvents.add(Data.AllEvents.get(0));
-		Data.SearchedEvents.add(Data.AllEvents.get(1));
+		
+		try {
+			Operations.addEvent("as", "", "", Operations.parseStringToDate("16-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("16-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
+		} catch (EventException e) {
+			e.printStackTrace();
+		}
+		try {
+			Operations.addEvent("alolblee kk", "", "", Operations.parseStringToDate("16-06-2019 08:00:00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
+		} catch (EventException e) {
+			e.printStackTrace();
+		}
+//		Data.SearchedEvents.add(Data.AllEvents.get(0));
+//		Data.SearchedEvents.add(Data.AllEvents.get(1));
 /* dane wstepne */
 /* do testów */
 

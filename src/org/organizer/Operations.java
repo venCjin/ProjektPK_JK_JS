@@ -9,9 +9,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
 import javax.swing.JButton;
-
 import com.toedter.calendar.JCalendar;
 
 public class Operations {
@@ -128,12 +126,12 @@ public class Operations {
 	/**
 	 * Dodaje nowe wydarzenie i sprawdza czy juz nie ma wtedy innego wydarzenia
 	 * 
-	 * @param name       Nazwa wydarzenia
-	 * @param desc       Opis wydarzenia
-	 * @param place      Miejsce wydarzenia
-	 * @param startDate  Data pocz¹tku wydarzenia
-	 * @param endDate    Data koñca wydarzenia
-	 * @param alarmDate  Data alarmu
+	 * @param name      Nazwa wydarzenia
+	 * @param desc      Opis wydarzenia
+	 * @param place     Miejsce wydarzenia
+	 * @param startDate Data pocz¹tku wydarzenia
+	 * @param endDate   Data koñca wydarzenia
+	 * @param alarmDate Data alarmu
 	 * @throws EventException
 	 */
 	public static void addEvent(String name, String desc, String place, Date startDate, Date endDate, Date alarmDate)
@@ -188,11 +186,11 @@ public class Operations {
 
 	public static void deleteEvent(Event e) {
 		Data.AllEvents.remove(e);
-//		Data.SearchedEvents.remove(e);
 	}
 
 	/**
-	 * Usuwa wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹.
+	 * Usuwa wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹ i czyœci liste
+	 * szukanych wydarzeñ.
 	 * 
 	 * @param d Data
 	 * @throws DateTimeException
@@ -201,10 +199,12 @@ public class Operations {
 		Date del = Operations.parseDate(d);
 		if (del == null)
 			throw new DateTimeException("Niepoprawna data.");
-		for (Event e : Data.AllEvents)
-			if (e.getEndDate().before(del))
-				Data.AllEvents.remove(e);
-		Data.SearchedEvents = new ArrayList<>(Data.AllEvents);
+
+		for (int i = 0; i < Data.AllEvents.size(); i++)
+			if (Data.AllEvents.get(i).getEndDate().before(del))
+				Data.AllEvents.remove(i);
+
+		Data.SearchedEvents.clear();
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class Operations {
 	 * Koloruje na wybrany kolor dni, w których s¹ wyszukane wydarzenia.
 	 * 
 	 * @param calendar Kalendarz, obiekt klasy JCalendar
-	 * @param c Kolor
+	 * @param c        Kolor
 	 */
 	public static void colorSearchedEvents(JCalendar calendar, Color c) {
 		JButton j = getDayButton(calendar, 1);
@@ -272,7 +272,7 @@ public class Operations {
 	 * Zwraca JButton okreœlonego dnia miesi¹ca z Kalendarza.
 	 * 
 	 * @param calendar Kalendarz, obiekt klasy JCalendar
-	 * @param day Dzieñ miesiaca
+	 * @param day      Dzieñ miesiaca
 	 * @return JButton okreœlonego dania miesiaca
 	 */
 	public static JButton getDayButton(JCalendar calendar, int day) {
