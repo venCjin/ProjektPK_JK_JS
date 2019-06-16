@@ -75,5 +75,28 @@
     </void>
    </object>
   </void>
+  <void method="add">
+   <object class="org.organizer.Event">
+    <void property="description">
+     <string></string>
+    </void>
+    <void property="endDate">
+     <object class="java.util.Date">
+      <long>1560663600000</long>
+     </object>
+    </void>
+    <void property="name">
+     <string>as</string>
+    </void>
+    <void property="place">
+     <string></string>
+    </void>
+    <void property="startDate">
+     <object class="java.util.Date">
+      <long>1560662400000</long>
+     </object>
+    </void>
+   </object>
+  </void>
  </object>
 </java>

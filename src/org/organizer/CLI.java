@@ -358,8 +358,8 @@ public class CLI {
 		}
 		
 		try {
-			Operations.addEvent("as", "", "", Operations.parseStringToDate("16-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("16-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
+			Operations.addEvent("as", "", "", Operations.parseStringToDate("16-06-2019 07:20:00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("16-06-2019 07:40:00", "dd-MM-yyyy HH:mm:ss"), null);
 		} catch (EventException e) {
 			e.printStackTrace();
 		}

@@ -23,13 +23,13 @@
 	- gui ()
 	- cli ()
 
-> szukaj Eventy ()
-	- logika ()
-	- gui ()
-	- cli ()
-
-> usuń strsze niż (OK)
+> szukaj Eventy (OK)
 	- logika (OK)
+	- gui ()
+	- cli (OK)
+
+> usuń strsze niż ()
+	- logika () - nie usuwa niektórych wydarzen, przyczyna niezidentyfikowana
 	- gui (OK) (DeleteBeforeWindow)
 	- cli (OK)
 

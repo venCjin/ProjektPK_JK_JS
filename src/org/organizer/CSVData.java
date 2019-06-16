@@ -35,11 +35,11 @@ public class CSVData {
 				oneLine.append(CSV_SEPARATOR);
 				oneLine.append(event.getPlace());
 				oneLine.append(CSV_SEPARATOR);
-				oneLine.append(Operations.parseDateToString(event.getStartDate(), "dd-MM-yyyy 00:00:00"));
+				oneLine.append(Operations.parseDateToString(event.getStartDate(), "dd-MM-yyyy HH:mm:ss"));
 				oneLine.append(CSV_SEPARATOR);
-				oneLine.append(Operations.parseDateToString(event.getEndDate(), "dd-MM-yyyy 00:00:00"));
+				oneLine.append(Operations.parseDateToString(event.getEndDate(), "dd-MM-yyyy HH:mm:ss"));
 				oneLine.append(CSV_SEPARATOR);
-				oneLine.append(Operations.parseDateToString(event.getAlarmDate(), "dd-MM-yyyy 00:00:00"));
+				oneLine.append(Operations.parseDateToString(event.getAlarmDate(), "dd-MM-yyyy HH:mm:ss"));
 				bw.write(oneLine.toString());
 				bw.newLine();
 			}
@@ -71,9 +71,9 @@ public class CSVData {
 				Event event = new Event(attributes[0],
 						attributes[1],
 						attributes[2],
-						Operations.parseStringToDate(attributes[3], "dd-MM-yyyy 00:00:00"),
-						Operations.parseStringToDate(attributes[4], "dd-MM-yyyy 00:00:00"),
-						Operations.parseStringToDate(attributes[5], "dd-MM-yyyy 00:00:00"));
+						Operations.parseStringToDate(attributes[3], "dd-MM-yyyy HH:mm:ss"),
+						Operations.parseStringToDate(attributes[4], "dd-MM-yyyy HH:mm:ss"),
+						Operations.parseStringToDate(attributes[5], "dd-MM-yyyy HH:mm:ss"));
 				set.add(event);
 			}
 		} catch (FileNotFoundException e) {

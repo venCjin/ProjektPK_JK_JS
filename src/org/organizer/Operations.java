@@ -150,7 +150,8 @@ public class Operations {
 			throw new EventException("Data rozpoczecia wydarzenia musi byc przed jego zakonczeniem.");
 
 		for (Event e : Data.AllEvents) {
-			if (startDate.after(e.getStartDate()) && endDate.before(e.getEndDate()))
+			if ((startDate.after(e.getStartDate()) || startDate.equals(e.getStartDate()))
+							&& (endDate.before(e.getEndDate()) || endDate.equals(e.getEndDate())))
 				throw new EventException("Nowe wydarzenie odbywa siê w trakcie innego.");
 
 			if (startDate.before(e.getEndDate()) && endDate.after(e.getEndDate()))

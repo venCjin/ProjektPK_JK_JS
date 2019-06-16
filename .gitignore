@@ -8,6 +8,10 @@ bin
 *.pdf
 .settings
 
+#inteliJ trash
+*.iml
+.idea
+
 # Compiled class file
 *.class
 
