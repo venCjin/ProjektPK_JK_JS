@@ -191,8 +191,7 @@ public class Operations {
 	}
 
 	/**
-	 * Usuwa wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹ i czyœci liste
-	 * szukanych wydarzeñ.
+	 * Usuwa wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹ i czyœci liste szukanych wydarzeñ.
 	 * 
 	 * @param d Data
 	 * @throws DateTimeException
@@ -204,10 +203,8 @@ public class Operations {
 
 		Data.SearchedEvents = new ArrayList<Event>(Data.AllEvents);
 		
-		Timestamp del = new Timestamp(d.getTime());
-		
 		for(Event e : Data.SearchedEvents) {
-			if (new Timestamp(e.getEndDate().getTime()).before(del))
+			if (e.getEndDate().before(d))
 				Data.AllEvents.remove(e);
 		}
 		
