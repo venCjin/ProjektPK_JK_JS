@@ -3,13 +3,16 @@ package org.organizer;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.time.DateTimeException;
 import java.awt.event.ActionEvent;
 
 /**
- * Okno usuwania wydarzeñ dziej¹cych siê przed podan¹ dat¹. 
+ * Okno usuwania wydarzeñ dziej¹cych siê przed podan¹ dat¹.
  */
 public class DeleteBeforeWindow {
 
@@ -55,7 +58,14 @@ public class DeleteBeforeWindow {
 		JButton btnOk = new JButton("OK");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Operations.deleteEventsBefore(dateChooser.getDate());
+				try {
+					Operations.deleteEventsBefore(dateChooser.getDate());
+				} catch (DateTimeException ex) {
+					JOptionPane.showMessageDialog(null, "Nie uda³o siê usun¹æ wydarzeñ\nOpis b³êdu: " + ex.getMessage(),
+							"B³¹d usuwania wydarzeñ starszych ni¿...", JOptionPane.ERROR_MESSAGE);
+				}
+				JOptionPane.showMessageDialog(null, "Operacja zakoñczona powodzeniem.",
+						"Usuwanie wydarzeñ starszych ni¿...", JOptionPane.INFORMATION_MESSAGE);
 				frame.dispose();
 			}
 		});

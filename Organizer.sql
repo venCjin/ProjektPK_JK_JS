@@ -11,13 +11,13 @@ GO
 --create tables--
 CREATE TABLE "Events"(
 "ID_Event" INTEGER NOT NULL IDENTITY(0,1),
-"Name" VARCHAR(100),
+"Name" VARCHAR(100) NOT NULL,
 "Description" VARCHAR(100),
 "Place" VARCHAR(100),
-"StartDate" Datetime,
-"EndDate" Datetime,
+"StartDate" Datetime NOT NULL,
+"EndDate" Datetime NOT NULL,
 "AlarmDate" Datetime,
-"Importance" INTEGER
+"Importance" INTEGER NOT NULL DEFAULT 0
 )
 
 select * from Events 

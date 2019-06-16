@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Types;
 
 /**
  * Pozwala zapisywaæ i odczytywaæ wydarzenia z bazy danych MSSQL Organizer.
@@ -138,18 +139,21 @@ public class SQLData {
 				Timestamp endDateTS = new Timestamp(event.getEndDate().getTime());
 				stmt.setString(5, endDateTS.toString());
 
-				Timestamp alarmDateTS = new Timestamp(event.getAlarmDate().getTime());
-				stmt.setString(6, alarmDateTS.toString());
-
+				if (event.getAlarmDate() == null) {
+					stmt.setNull(6, Types.TIMESTAMP);
+				} else {
+					Timestamp alarmDateTS = new Timestamp(event.getAlarmDate().getTime());
+					stmt.setString(6, alarmDateTS.toString());
+				}
 				stmt.setLong(7, event.getImportance());
 
 				stmt.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();
-			} finally {
 				disconnectSQL();
 			}
 		}
+		disconnectSQL();
 	}
 
 	/**

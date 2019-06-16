@@ -9,22 +9,28 @@
 > okienko dnia ()
 	- logika (OK)
 	- gui (OK) (DayWindow)
-	- cli ()
+	- cli (OK)
+	> edycja wydarzenia
+		- gui () (EditEventWindow)
+		- cli ()
+	> usuwanie wydarzenia
+		- gui (OK) (DayWindow)
+		- cli (OK)	
 
 > alarm ()
 	- logika ()
 	- gui ()
 	- cli ()
 
-> wyszukaj Eventy ()
+> szukaj Eventy ()
 	- logika ()
 	- gui ()
 	- cli ()
 
-> usuń strsze niż ()
+> usuń strsze niż (OK)
 	- logika (OK)
 	- gui (OK) (DeleteBeforeWindow)
-	- cli ()
+	- cli (OK)
 
 > ZAPIS DANYCH ()
 	- sql (OK)
@@ -35,5 +41,3 @@
 	- sql (OK)
 	- xml ()
 	- csv ()
-
-

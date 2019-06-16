@@ -3,6 +3,7 @@ package org.organizer;
 import java.awt.Color;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -32,11 +33,11 @@ public class Operations {
 			e.getMessage();
 			date = null;
 		} catch (ParseException e) {
-			// nie uda³o siê przetworzyc na date, pewni String data nie poprawny
+			// nie uda³o siê przetworzyc na date, pewnie String data nie poprawny
 			e.getMessage();
 			date = null;
 		} catch (NullPointerException e) {
-			// nie uda³o siê przetworzyc na date, pewni String data nie poprawny
+			// nie uda³o siê przetworzyc na date, pewnie String data nie poprawny
 			e.getMessage();
 			date = null;
 		}
@@ -197,10 +198,11 @@ public class Operations {
 	 * Usuwa Wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹.
 	 * 
 	 * @param d Data
-	 * @throws EventError
+	 * @throws DateTimeException
 	 */
-	public static void deleteEventsBefore(Date d) {
+	public static void deleteEventsBefore(Date d) throws DateTimeException {
 		Date del = Operations.parseDate(d);
+		if (del == null) throw new DateTimeException("Niepoprawna data.");
 		for (Event e : Data.AllEvents)
 			if (e.endDate.before(del))
 				Data.AllEvents.remove(e);
