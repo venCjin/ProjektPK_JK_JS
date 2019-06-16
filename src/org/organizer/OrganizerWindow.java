@@ -25,7 +25,7 @@ import java.awt.event.InputEvent;
  */
 public class OrganizerWindow {
 	private JFrame frame;
-	private Color eventDayColor = Color.CYAN;
+	private Color eventDayColor = Color.YELLOW;
 
 	/**
 	 * Tworzy okno programu Organizera.
@@ -59,6 +59,7 @@ public class OrganizerWindow {
 
 		JCalendar calendar = new JCalendar();
 		calendar.setTodayButtonVisible(true);
+		
 // TODO		
 //		Operations.getDayButton(calendar, calendar.getDayChooser().getDay()).setBackground(new JButton().getBackground());
 		
@@ -225,6 +226,7 @@ public class OrganizerWindow {
 
 		// [W/S] - prze³¹czenie roku
 		// [A/D] - prze³¹czenie miesi¹ca
+		/*
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
 			public boolean dispatchKeyEvent(KeyEvent e) {
 				if (e.getID() == KeyEvent.KEY_PRESSED) {
@@ -255,6 +257,6 @@ public class OrganizerWindow {
 				}
 				return false;
 			}
-		});
+		});*/
 	}
 }
