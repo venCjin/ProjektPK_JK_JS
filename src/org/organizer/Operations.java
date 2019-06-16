@@ -1,6 +1,7 @@
 package org.organizer;
 
 import java.awt.Color;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
@@ -197,14 +198,19 @@ public class Operations {
 	 * @throws DateTimeException
 	 */
 	public static void deleteEventsBefore(Date d) throws DateTimeException {
-		Date del = Operations.parseDate(d);
-		if (del == null)
+		d = Operations.parseDate(d);
+		if (d == null)
 			throw new DateTimeException("Niepoprawna data.");
 
-		for (int i = 0; i < Data.AllEvents.size(); i++)
-			if (Data.AllEvents.get(i).getEndDate().before(del))
-				Data.AllEvents.remove(i);
-
+		Data.SearchedEvents = new ArrayList<Event>(Data.AllEvents);
+		
+		Timestamp del = new Timestamp(d.getTime());
+		
+		for(Event e : Data.SearchedEvents) {
+			if (new Timestamp(e.getEndDate().getTime()).before(del))
+				Data.AllEvents.remove(e);
+		}
+		
 		Data.SearchedEvents.clear();
 	}
 
