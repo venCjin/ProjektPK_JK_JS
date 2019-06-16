@@ -40,7 +40,7 @@ public class DayWindow {
 		});
 	}
 
-	protected DayWindow(String day, Color color) {
+	private DayWindow(String day, Color color) {
 		this.searchedEventColor = color;
 		initialize(day);
 	}

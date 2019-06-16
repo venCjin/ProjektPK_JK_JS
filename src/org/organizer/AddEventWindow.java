@@ -164,11 +164,6 @@ public class AddEventWindow {
 				String desc = descField.getText();
 				String place = placeField.getText();
 				Date alarmDate = null;
-
-				// TODO importance
-				int impotranece = 0;
-				// TODO do Operations
-
 				try {
 					if (alarmChckbx.isSelected()) alarmDate = Operations.parseDate(alarmChooser.getDate());
 						
@@ -177,11 +172,10 @@ public class AddEventWindow {
 									(int) startMinSpin.getValue(), 0),
 							Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
 									(int) endMinSpin.getValue(), 0),
-							alarmDate, impotranece);
-//					System.out.println(Data.AllEvents.toString());
+							alarmDate);
 					frame.dispose();
-				} catch (EventError err) {
-					JOptionPane.showMessageDialog(new JFrame(), err.getMessage(), "EventError", JOptionPane.ERROR_MESSAGE);
+				} catch (EventException err) {
+					JOptionPane.showMessageDialog(new JFrame(), err.getMessage(), "EventException", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});

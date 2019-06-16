@@ -9,7 +9,7 @@ public class SearchWindow {
 	private JFrame frame;
 
 	/**
-	 * 
+	 * Tworzy okno wyszukiwania wydarzeñ.
 	 */
 	public static void show() {
 		EventQueue.invokeLater(new Runnable() {
@@ -24,15 +24,12 @@ public class SearchWindow {
 		});
 	}
 
-	/**
-	 * 
-	 */
-	public SearchWindow() {
+	private SearchWindow() {
 		initialize();
 	}
 
 	/**
-	 * 
+	 * Inicjalizuje zawartoœæ okna wyszukiwania wydarzeñ.
 	 */
 	private void initialize() {
 		frame = new JFrame();

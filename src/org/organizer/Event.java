@@ -18,8 +18,6 @@ public class Event implements Comparable<Event>, Serializable {
 	protected Date endDate;
 	protected Date alarmDate;
 
-	protected int importance;
-
 	/**
 	 * Konstruktor bezparametrowy wymagany do serializacji do i z formatu XML. lub
 	 * Konstruktor bezparametrowy wymagany do importu i eksportu do formatu XML.
@@ -36,10 +34,8 @@ public class Event implements Comparable<Event>, Serializable {
 	 * @param startDate   Data rozpoczecia wydarzenia
 	 * @param endDate     Data zakonczenia wydarzenia
 	 * @param alarmDate   Data alarmu wydarzenia
-	 * @param importance  Waznosc wydarzenia
 	 */
-	public Event(String name, String description, String place, Date startDate, Date endDate, Date alarmDate,
-			int importance) {
+	public Event(String name, String description, String place, Date startDate, Date endDate, Date alarmDate) {
 		super();
 		this.name = name;
 		this.description = description;
@@ -47,7 +43,6 @@ public class Event implements Comparable<Event>, Serializable {
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.alarmDate = alarmDate;
-		this.importance = importance;
 	}
 
 	/**
@@ -159,25 +154,7 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Zwraca waznosc wydarzenia.
-	 * 
-	 * @return Waznosc wydarzenia
-	 */
-	public int getImportance() {
-		return importance;
-	}
-
-	/**
-	 * Ustawia waznosc wydarzenia.
-	 * 
-	 * @param importance Waznosc wydarzenia
-	 */
-	public void setImportance(int importance) {
-		this.importance = importance;
-	}
-
-	/**
-	 * Porownuje Wydarzenia na podstawie daty.
+	 * Porownuje Wydarzenia na podstawie daty rozpoczecia.
 	 */
 	@Override
 	public int compareTo(Event E) {
@@ -192,18 +169,13 @@ public class Event implements Comparable<Event>, Serializable {
 	/**
 	 * Komparator waznosci Wydarzenia.
 	 */
-	public static Comparator<Event> ImportanceComparator = new Comparator<Event>() {
+	public static Comparator<Event> NameComparator = new Comparator<Event>() {
 		/**
 		 * Porownuje Wydarzenia na podstawie waznosci.
 		 */
 		@Override
-		public int compare(Event E1, Event E2) {
-			if (E1.importance == E2.importance)
-				return 0;
-			if (E1.importance > E2.importance)
-				return 1;
-			else
-				return -1;
+		public int compare(Event e1, Event e2) {
+			return e1.getName().compareTo(e2.getName());
 		}
 	};
 
@@ -214,12 +186,11 @@ public class Event implements Comparable<Event>, Serializable {
 	public String toString() {
 		String alarm;
 		if (alarmDate != null)
-			alarm = Operations.parseDateToString(alarmDate,"dd-MM-yyyy");
+			alarm = Operations.parseDateToString(alarmDate, "dd-MM-yyyy");
 		else
 			alarm = "(nie ustawiono)";
-		return "Nazwa: " + name + ", opis: " + description + ", miejsce: " + place + 
-				", data rozpoczecia: " + Operations.parseDateToString(startDate,"dd-MM-yyyy HH:mm:ss")
-				+ ", data zakonczenia: " + Operations.parseDateToString(endDate,"dd-MM-yyyy HH:mm:ss")
-				+ ", data alarmu: " + alarm + ", waznosc: " + importance;
+		return "Nazwa: " + name + ", opis: " + description + ", miejsce: " + place + ", data rozpoczecia: "
+				+ Operations.parseDateToString(startDate, "dd-MM-yyyy HH:mm:ss") + ", data zakonczenia: "
+				+ Operations.parseDateToString(endDate, "dd-MM-yyyy HH:mm:ss") + ", data alarmu: " + alarm;
 	}
 }

@@ -1,12 +1,12 @@
 package org.organizer;
 
+import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.util.List;
 import java.util.Scanner;
 
 public class CLI {
 
-//	static boolean isGUI = false;
 	static Scanner terminal = new Scanner(System.in);
 
 	/**
@@ -19,8 +19,6 @@ public class CLI {
 		String startDate = null;
 		String endDate = null;
 		String alarmDate = null;
-		// TODO importance
-		int importance = 0;
 		name = terminal.nextLine();
 
 		System.out.println("Podaj nazwe wydarzenia : ");
@@ -48,17 +46,18 @@ public class CLI {
 //			alarmDate += " " + terminal.next();
 		}
 
-//		System.out.println("Podaj waznosc wydarzenia : ");
-//		importance = terminal.nextInt();
-
 		try {
-			Operations.addEvent(name, desc, place, Operations.parseStringToDate(startDate, "dd-MM-yyyy HH:mm:ss"),
+			Operations.addEvent(
+					name,
+					desc,
+					place,
+					Operations.parseStringToDate(startDate, "dd-MM-yyyy HH:mm:ss"),
 					Operations.parseStringToDate(endDate, "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy"),
-//					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy HH:mm:ss"),
-					importance);
-		} catch (EventError e) {
-			System.out.println(e.getMessage());
+					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy")
+//					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy HH:mm:ss")
+					);
+		} catch (EventException e) {
+			System.err.println(e.getMessage());
 		}
 	}
 
@@ -149,7 +148,7 @@ public class CLI {
 	/**
 	 * Terminalowe menu do zapisu wydarzeñ.
 	 */
-	private static void save() { // TODO
+	private static void save() { // TODO wyj¹tki
 		int option;
 		System.out.println("Gdzie chcesz wyeksportowaæ dane?");
 		System.out.println("[1] baza danych SQL");
@@ -160,16 +159,26 @@ public class CLI {
 		switch (option) {
 		case 1:
 			SQLData sql = new SQLData();
-			sql.deleteAllEventsSQL();
-			sql.writeAllEventsSQL(Data.AllEvents);
+			try {
+				sql.deleteAllEventsSQL();
+				sql.writeAllEventsSQL(Data.AllEvents);
+			} catch (SQLException e) {
+				System.err.println(e.getMessage());
+			}
 			break;
 		case 2:
-			// TODO xml
-
+			try {
+				XMLData.writeXML(Data.AllEvents);
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
 			break;
 		case 3:
-			// TODO csv
-
+			try {
+				CSVData.writeCSV(Data.AllEvents);
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
 			break;
 		default:
 			System.out.println("B³êdna opcja");
@@ -179,7 +188,7 @@ public class CLI {
 	/**
 	 * Terminalowe menu do wczytywania wydarzeñ.
 	 */
-	private static void load() { // TODO
+	private static void load() { // TODO wyj¹tki
 		int option;
 		System.out.println("Sk¹d chcesz zaimportowaæ dane?");
 		System.out.println("[1] baza danych SQL");
@@ -190,15 +199,25 @@ public class CLI {
 		switch (option) {
 		case 1:
 			SQLData sql = new SQLData();
-			Data.AllEvents = sql.readAllEventsSQL();
+			try {
+				Data.AllEvents = sql.readAllEventsSQL();
+			} catch (SQLException e) {
+				System.err.println(e.getMessage());
+			}
 			break;
 		case 2:
-			// TODO xml
-
+			try {
+				Data.AllEvents = XMLData.readXML();
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
 			break;
 		case 3:
-			// TODO csv
-
+			try {
+				Data.AllEvents = CSVData.readCSV();
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
+			}
 			break;
 		default:
 			System.out.println("B³êdna opcja");
@@ -273,26 +292,12 @@ public class CLI {
 		case "quit":
 			return;
 
-//		case "gui":
-//			if (!isGUI) {
-//				showGUI();
-//				System.out.println("Uruchmiam GUI\n");
-//			} else
-//				System.out.println("GUI jest ju¿ w³¹czone!\n");
-//			break;
-
 		default:
 			System.out.println("Nie znaleziono polecenia: '" + cmd + "'\n");
 			printHelp();
 		}
 	}
 
-	/**
-	 * Wyœwietla interfejs okienkowy / GUI
-	 */
-	private static void showGUI() {
-		OrganizerWindow.show();
-	}
 
 	/**
 	 * Uruchamia program z argumentami
@@ -301,34 +306,34 @@ public class CLI {
 	 */
 	public static void main(String[] args) {
 
-		/* dane wstepne */
-		/* do testów */
+/* dane wstepne */
+/* do testów */
 		try {
 			Operations.addEvent("1", "", "", Operations.parseStringToDate("16-06-2019 01:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("16-06-2019 02:30:00", "dd-MM-yyyy HH:mm:ss"), null, 0);
-		} catch (EventError e) {
+					Operations.parseStringToDate("16-06-2019 02:30:00", "dd-MM-yyyy HH:mm:ss"), null);
+		} catch (EventException e) {
 			e.printStackTrace();
 		}
 		try {
 			Operations.addEvent("2", "", "", Operations.parseStringToDate("16-06-2019 03:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("16-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"), null, 0);
-		} catch (EventError e) {
+					Operations.parseStringToDate("16-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"), null);
+		} catch (EventException e) {
 			e.printStackTrace();
 		}
 		try {
 			Operations.addEvent("3", "", "", Operations.parseStringToDate("16-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("16-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null, 0);
-		} catch (EventError e) {
+					Operations.parseStringToDate("16-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
+		} catch (EventException e) {
 			e.printStackTrace();
 		}
 		Data.SearchedEvents.add(Data.AllEvents.get(0));
 		Data.SearchedEvents.add(Data.AllEvents.get(1));
-		/* dane wstepne */
-		/* do testów */
+/* dane wstepne */
+/* do testów */
 
 		if (args.length > 0) {
 			if (args[0].equals("GUI")) {
-				showGUI();
+				OrganizerWindow.show();
 			} else if (args[0].equals("CLI")) {
 				System.out.println("Witaj w Organizerze");
 				while (true) {

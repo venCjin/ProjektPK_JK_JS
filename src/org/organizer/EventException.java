@@ -1,15 +1,12 @@
 package org.organizer;
 
-//import javax.swing.JFrame;
-//import javax.swing.JOptionPane;
-
-public class EventError extends Exception {
+public class EventException extends Exception {
 	/**
 	 * Klasa reprezentujaca pojedynczy blad w wydarzeniu.
 	 */
 	private static final long serialVersionUID = 1L;
 
-	EventError() {
+	EventException() {
 		this("");
 	}
 
@@ -18,7 +15,7 @@ public class EventError extends Exception {
 	 * 
 	 * @param msg Wiadowosc z informacja o bledzie
 	 */
-	EventError(String msg) {
+	EventException(String msg) {
 		super(msg);
 	}
 }

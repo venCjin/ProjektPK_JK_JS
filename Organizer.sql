@@ -16,8 +16,7 @@ CREATE TABLE "Events"(
 "Place" VARCHAR(100),
 "StartDate" Datetime NOT NULL,
 "EndDate" Datetime NOT NULL,
-"AlarmDate" Datetime,
-"Importance" INTEGER NOT NULL DEFAULT 0
+"AlarmDate" Datetime
 )
 
 select * from Events 

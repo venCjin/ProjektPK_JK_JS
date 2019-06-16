@@ -32,12 +32,12 @@
 	- gui (OK) (DeleteBeforeWindow)
 	- cli (OK)
 
-> ZAPIS DANYCH ()
+> ZAPIS DANYCH (OK)
 	- sql (OK)
-	- xml ()
-	- csv ()
+	- xml (OK)
+	- csv (OK)
 
-> ODCZYT DANYCH ()
+> ODCZYT DANYCH (OK)
 	- sql (OK)
-	- xml ()
-	- csv ()
+	- xml (OK)
+	- csv (OK)

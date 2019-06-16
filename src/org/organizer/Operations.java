@@ -117,7 +117,6 @@ public class Operations {
 				buf.append("0");
 			buf.append(s);
 
-//			System.out.println("end: " + buf.toString());
 			date = out.parse(buf.toString());
 		} catch (Exception e) {
 			// e.printStackTrace();
@@ -127,50 +126,48 @@ public class Operations {
 	}
 
 	/**
-	 * Dodaje nowe Wydarzenie i sprawdza czy juz nie ma wtedy innego Wydarzenia
+	 * Dodaje nowe wydarzenie i sprawdza czy juz nie ma wtedy innego wydarzenia
 	 * 
-	 * @param name       Nazwa Wydarzenia
-	 * @param desc       Opis Wydarzenia
-	 * @param place      Miejsce Wydarzenia
-	 * @param startDate  Data pocz¹tku Wydarzenia
-	 * @param endDate    Data koñca Wydarzenia
+	 * @param name       Nazwa wydarzenia
+	 * @param desc       Opis wydarzenia
+	 * @param place      Miejsce wydarzenia
+	 * @param startDate  Data pocz¹tku wydarzenia
+	 * @param endDate    Data koñca wydarzenia
 	 * @param alarmDate  Data alarmu
-	 * @param importance Wa¿noœæ Wydarzenia
-	 * @throws EventError
+	 * @throws EventException
 	 */
-	public static void addEvent(String name, String desc, String place, Date startDate, Date endDate, Date alarmDate,
-			int importance) throws EventError {
+	public static void addEvent(String name, String desc, String place, Date startDate, Date endDate, Date alarmDate)
+			throws EventException {
 
 		if (name == "" || name == null || name.isEmpty())
-			throw new EventError("Pusta nazwa");
+			throw new EventException("Pusta nazwa");
 
 		if (startDate == null)
-			throw new EventError("Nieprawid³owa data rozpoczecia wydarzenia.");
+			throw new EventException("Nieprawid³owa data rozpoczecia wydarzenia.");
 
 		if (endDate == null)
-			throw new EventError("Nieprawid³owa data zakonczenia wydarzenia.");
+			throw new EventException("Nieprawid³owa data zakonczenia wydarzenia.");
 
 		if (endDate.before(startDate))
-			throw new EventError("Data rozpoczecia wydarzenia musi byc przed jego zakonczeniem.");
+			throw new EventException("Data rozpoczecia wydarzenia musi byc przed jego zakonczeniem.");
 
-		// TODO sprawdziæ bo coœ mi nie pasi
 		for (Event e : Data.AllEvents) {
 			if (startDate.after(e.startDate) && endDate.before(e.endDate))
-				throw new EventError("Nowe wydarzenie odbywa siê w trakcie innego.");
+				throw new EventException("Nowe wydarzenie odbywa siê w trakcie innego.");
 
 			if (startDate.before(e.endDate) && endDate.after(e.endDate))
-				throw new EventError("Nowe wydarzenie zaczyna siê przed zakoñczeniem poprzedniego.");
+				throw new EventException("Nowe wydarzenie zaczyna siê przed zakoñczeniem poprzedniego.");
 
 			if (endDate.after(e.startDate) && startDate.before(e.startDate))
-				throw new EventError("Nowe wydarzenie koñczy siê po rozpoczêciu nastêpnego.");
+				throw new EventException("Nowe wydarzenie koñczy siê po rozpoczêciu nastêpnego.");
 		}
 
-		Data.AllEvents.add(new Event(name, desc, place, startDate, endDate, alarmDate, importance));
+		Data.AllEvents.add(new Event(name, desc, place, startDate, endDate, alarmDate));
 		sortDate();
 	}
 
 	/**
-	 * Zwraca listê Wydarzeñ dla danego dnia.
+	 * Zwraca listê wydarzeñ dla danego dnia.
 	 * 
 	 * @param day Data dnia w formacie "dd-MM-yyyy"
 	 * @return Lista wydarzeñ danego dnia
@@ -195,14 +192,15 @@ public class Operations {
 	}
 
 	/**
-	 * Usuwa Wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹.
+	 * Usuwa wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹.
 	 * 
 	 * @param d Data
 	 * @throws DateTimeException
 	 */
 	public static void deleteEventsBefore(Date d) throws DateTimeException {
 		Date del = Operations.parseDate(d);
-		if (del == null) throw new DateTimeException("Niepoprawna data.");
+		if (del == null)
+			throw new DateTimeException("Niepoprawna data.");
 		for (Event e : Data.AllEvents)
 			if (e.endDate.before(del))
 				Data.AllEvents.remove(e);
@@ -210,17 +208,17 @@ public class Operations {
 	}
 
 	/**
-	 * Sortuje Wydarzenia po dacie
+	 * Sortuje wydarzenia po dacie
 	 */
 	public static void sortDate() {
 		Collections.sort(Data.AllEvents);
 	}
 
 	/**
-	 * Sortuje Wydarzenia po ich wa¿nosci
+	 * Sortuje wydarzenia po ich nazwie
 	 */
-	public static void sortImportance() {
-		Collections.sort(Data.AllEvents, Event.ImportanceComparator);
+	public static void sortName() {
+		Collections.sort(Data.AllEvents, Event.NameComparator);
 	}
 
 	/**
@@ -256,7 +254,7 @@ public class Operations {
 	 * Koloruje na wybrany kolor dni, w których s¹ wyszukane wydarzenia.
 	 * 
 	 * @param calendar Kalendarz, obiekt klasy JCalendar
-	 * @param c        Kolor
+	 * @param c Kolor
 	 */
 	public static void colorSearchedEvents(JCalendar calendar, Color c) {
 		JButton j = getDayButton(calendar, 1);
@@ -274,7 +272,7 @@ public class Operations {
 	 * Zwraca JButton okreœlonego dnia miesi¹ca z Kalendarza.
 	 * 
 	 * @param calendar Kalendarz, obiekt klasy JCalendar
-	 * @param day      Dzieñ miesiaca
+	 * @param day Dzieñ miesiaca
 	 * @return JButton okreœlonego dania miesiaca
 	 */
 	public static JButton getDayButton(JCalendar calendar, int day) {
@@ -291,23 +289,29 @@ public class Operations {
 		if (day < 1)
 			day = 1;
 
-		int daysInCurrentMonth = 1;
-		switch (calendar.getMonthChooser().getMonth() + 1) {
-		case 2:
-			if (calendar.getYearChooser().getYear() % 4 == 0)
-				daysInCurrentMonth = 29;
-			else
-				daysInCurrentMonth = 28;
-			break;
-		case 4:
-		case 6:
-		case 9:
-		case 11:
-			daysInCurrentMonth = 30;
-			break;
-		default:
-			daysInCurrentMonth = 31;
-		}
+//		int daysInCurrentMonth = 1;
+//		switch (calendar.getMonthChooser().getMonth() + 1) {
+//		case 2:
+//			if (calendar.getYearChooser().getYear() % 4 == 0)
+//				daysInCurrentMonth = 29;
+//			else
+//				daysInCurrentMonth = 28;
+//			break;
+//		case 4:
+//		case 6:
+//		case 9:
+//		case 11:
+//			daysInCurrentMonth = 30;
+//			break;
+//		default:
+//			daysInCurrentMonth = 31;
+//		}
+
+		Calendar tmpCalendar = (Calendar) calendar.getCalendar().clone();
+		tmpCalendar.set(Calendar.DAY_OF_MONTH, 1);
+		tmpCalendar.add(Calendar.MONTH, 1);
+		tmpCalendar.add(Calendar.DAY_OF_MONTH, -1);
+		int daysInCurrentMonth = tmpCalendar.get(Calendar.DAY_OF_MONTH);
 
 		if (day > daysInCurrentMonth)
 			day = daysInCurrentMonth;

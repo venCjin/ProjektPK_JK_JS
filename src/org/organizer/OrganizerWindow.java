@@ -13,6 +13,7 @@ import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.sql.SQLException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.KeyStroke;
@@ -58,7 +59,7 @@ public class OrganizerWindow {
 
 		JCalendar calendar = new JCalendar();
 		calendar.setTodayButtonVisible(true);
-		
+// TODO		
 //		Operations.getDayButton(calendar, calendar.getDayChooser().getDay()).setBackground(new JButton().getBackground());
 		
 		calendar.getDayChooser().setAlwaysFireDayProperty(true);
@@ -115,7 +116,11 @@ public class OrganizerWindow {
 		mntmDoBazySql.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SQLData sql = new SQLData();
-				sql.writeAllEventsSQL(Data.AllEvents);
+				try {
+					sql.writeAllEventsSQL(Data.AllEvents);
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		mnZapisz.add(mntmDoBazySql);
@@ -123,8 +128,11 @@ public class OrganizerWindow {
 		JMenuItem mntmDoXml = new JMenuItem("do XML");
 		mntmDoXml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO zapis do XML
-				
+				try {
+					XMLData.writeXML(Data.AllEvents);
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "XML Exception", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		mnZapisz.add(mntmDoXml);
@@ -132,8 +140,11 @@ public class OrganizerWindow {
 		JMenuItem mntmDoCsv = new JMenuItem("do CSV");
 		mntmDoCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO zapis do CSV
-				
+				try {
+					CSVData.writeCSV(Data.AllEvents);
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "CSV Exception", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		mnZapisz.add(mntmDoCsv);
@@ -144,9 +155,12 @@ public class OrganizerWindow {
 		JMenuItem mntmZBazySql = new JMenuItem("z bazy SQL");
 		mntmZBazySql.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO odczyt z SQL (zapis do AllEvents)
 				SQLData sql = new SQLData();
-				Data.AllEvents = sql.readAllEventsSQL();
+				try {
+					Data.AllEvents = sql.readAllEventsSQL();
+				} catch (SQLException e1) {
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception", JOptionPane.ERROR_MESSAGE);
+				}
 //				Operations.colorSearchedEvents(calendar, eventDayColor);
 			}
 		});
@@ -155,9 +169,12 @@ public class OrganizerWindow {
 		JMenuItem mntmZXml = new JMenuItem("z XML");
 		mntmZXml.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO odczyt z XML (zapis do AllEvents oraz Searched)
-				
-				Operations.colorSearchedEvents(calendar, eventDayColor);
+				try {
+					Data.AllEvents = XMLData.readXML();
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "XML Exception", JOptionPane.ERROR_MESSAGE);
+				}
+//				Operations.colorSearchedEvents(calendar, eventDayColor);
 			}
 		});
 		mnWczytaj.add(mntmZXml);
@@ -165,9 +182,12 @@ public class OrganizerWindow {
 		JMenuItem mntmZCsv = new JMenuItem("z CSV");
 		mntmZCsv.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO odczyt z CSV (zapis do AllEvents oraz Searched)
-				
-				Operations.colorSearchedEvents(calendar, eventDayColor);
+				try {
+					Data.AllEvents = CSVData.readCSV();
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "CSV Exception", JOptionPane.ERROR_MESSAGE);
+				}
+//				Operations.colorSearchedEvents(calendar, eventDayColor);
 			}
 		});
 		mnWczytaj.add(mntmZCsv);
@@ -200,25 +220,34 @@ public class OrganizerWindow {
 		});
 		mnInfo.add(mntmInfo);
 
-		// KEYBOARD
-		// TODO chyba do wyrzucenia bo jak kliknie siê dzieñ to lewo prawo zmiania równie¿ dni
+		// [W/S] - prze³¹czenie roku
+		// [A/D] - prze³¹czenie miesi¹ca
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
 			public boolean dispatchKeyEvent(KeyEvent e) {
 				if (e.getID() == KeyEvent.KEY_PRESSED) {
-					if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+					switch(e.getKeyCode()) {
+					case KeyEvent.VK_A:
 						if (calendar.getMonthChooser().getMonth() == 0) {
 							calendar.getYearChooser().setYear(calendar.getYearChooser().getYear() - 1);
 							calendar.getMonthChooser().setMonth(11);
 						} else
 							calendar.getMonthChooser().setMonth(calendar.getMonthChooser().getMonth() - 1);
 						Operations.colorSearchedEvents(calendar, eventDayColor);
-					} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+						break;
+					case KeyEvent.VK_D:
 						if (calendar.getMonthChooser().getMonth() == 11) {
 							calendar.getYearChooser().setYear(calendar.getYearChooser().getYear() + 1);
 							calendar.getMonthChooser().setMonth(0);
 						} else
 							calendar.getMonthChooser().setMonth(calendar.getMonthChooser().getMonth() + 1);
 						Operations.colorSearchedEvents(calendar, eventDayColor);
+						break;
+					case KeyEvent.VK_W:
+						calendar.getYearChooser().setYear(calendar.getYearChooser().getYear() + 1);
+						break;
+					case KeyEvent.VK_S:
+						calendar.getYearChooser().setYear(calendar.getYearChooser().getYear() - 1);
+						break;
 					}
 				}
 				return false;
