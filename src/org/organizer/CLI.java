@@ -7,19 +7,19 @@ import java.util.Scanner;
 
 public class CLI {
 
-	static Scanner terminal = new Scanner(System.in);
+	private static Scanner terminal = new Scanner(System.in);
 
 	/**
 	 * Terminalowe menu do dodawania nowego wydarzenia.
 	 */
 	private static void add() {
-		String name = null;
-		String desc = null;
-		String place = null;
-		String startDate = null;
-		String endDate = null;
+		String name;
+		String desc;
+		String place;
+		String startDate;
+		String endDate;
 		String alarmDate = null;
-		name = terminal.nextLine();
+		terminal.nextLine();
 
 		System.out.println("Podaj nazwe wydarzenia : ");
 		System.out.print("nazwa> "); name = terminal.nextLine();
@@ -68,7 +68,7 @@ public class CLI {
 	 */
 	private static void search() {
 		String phrase;
-		phrase = terminal.nextLine();
+		terminal.nextLine();
 		System.out.println("Podaj frazê do wyszukania w nazwie wydarzenia :");
 		System.out.print("fraza> "); phrase = terminal.nextLine();
 		
@@ -81,7 +81,7 @@ public class CLI {
 	 * Terminalowe menu do usuwania wydarzeñ starszych niz podana data.
 	 */
 	private static void delBefore() {
-		String date = null;
+		String date;
 		System.out.println("Podaj date (dd-MM-yyyy): ");
 		System.out.print("data> "); date = terminal.next();
 		try {
@@ -97,7 +97,7 @@ public class CLI {
 	 * Terminalowe menu do wyœwietlania wszystkich wydarzeñ trwaj¹cych danego dnia.
 	 */
 	private static void showDay() {
-		String date = null;
+		String date;
 		System.out.println("Podaj date (dd-MM-yyyy):");
 		System.out.print("data> "); date = terminal.next();
 
@@ -210,8 +210,9 @@ public class CLI {
 	 * Interpretuje komendy z konsoli.
 	 * 
 	 * @param cmd Komenda z konsoli
+	 * @return Czy kontynuowac wykonywanie poleceñ
 	 */
-	private static void command(String cmd) {
+	private static boolean command(String cmd) {
 		switch (cmd) {
 		case "d":
 		case "dodaj":
@@ -255,12 +256,13 @@ public class CLI {
 
 		case "q":
 		case "quit":
-			return;
+			return false;
 
 		default:
 			System.out.println("Nie znaleziono polecenia: '" + cmd + "'\n");
 			printHelp();
 		}
+		return true;
 	}
 
 	/**
@@ -380,10 +382,11 @@ public class CLI {
 			} else if (args[0].equals("CLI")) {
 				System.out.println("Witaj w Organizerze");
 				System.out.println("Napisz 'help' by uzyskac pomoc");
-				while (true) {
+
+				do {
 					System.out.print("\npolecenie> ");
-					command(terminal.next());
-				}
+				} while (command(terminal.next()));
+
 			} else {
 				throw new RuntimeException("Niepoprawne argumenty uruchamiania programu.");
 			}
