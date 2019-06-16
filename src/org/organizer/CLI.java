@@ -310,7 +310,7 @@ public class CLI {
 /* do testów */
 		try {
 			Operations.addEvent("1", "", "", Operations.parseStringToDate("16-06-2019 01:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("16-06-2019 02:30:00", "dd-MM-yyyy HH:mm:ss"), null);
+					Operations.parseStringToDate("16-06-2019 02:30:00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("16-06-2019 01:30:00", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
@@ -336,6 +336,7 @@ public class CLI {
 				OrganizerWindow.show();
 			} else if (args[0].equals("CLI")) {
 				System.out.println("Witaj w Organizerze");
+				System.out.println("Napisz 'help' by uzyskac pomoc");
 				while (true) {
 					System.out.print("\npolecenie> ");
 					command(terminal.next());

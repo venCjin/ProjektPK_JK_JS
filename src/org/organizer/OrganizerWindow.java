@@ -117,6 +117,7 @@ public class OrganizerWindow {
 			public void actionPerformed(ActionEvent e) {
 				SQLData sql = new SQLData();
 				try {
+					sql.deleteAllEventsSQL();
 					sql.writeAllEventsSQL(Data.AllEvents);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception", JOptionPane.ERROR_MESSAGE);
@@ -158,6 +159,8 @@ public class OrganizerWindow {
 				SQLData sql = new SQLData();
 				try {
 					Data.AllEvents = sql.readAllEventsSQL();
+					System.out.println(Data.AllEvents);
+					JOptionPane.showMessageDialog(new JFrame(), "Zapis do bazy danych SQL powiód³ siê.", "Zapis", JOptionPane.PLAIN_MESSAGE);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception", JOptionPane.ERROR_MESSAGE);
 				}

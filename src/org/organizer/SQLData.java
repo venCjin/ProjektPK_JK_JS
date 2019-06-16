@@ -32,11 +32,15 @@ public class SQLData {
 
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych MSSQL Organizer.
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public void disconnectSQL() throws SQLException {
-		if (con != null) {
-			con.close();
+		try {
+			if (con != null) {
+				con.close();
+			}
+		} catch(SQLException e) {
+			throw new SQLException("Nie uda³o siê zamkn¹æ po³¹czenia z baz¹ danych\nOpis: " + e.getMessage());
 		}
 	}
 
@@ -72,11 +76,11 @@ public class SQLData {
 
 				stmt.executeUpdate();
 			} catch (SQLException e) {
-				throw new SQLException("Nie uda³o siê zapisaæ do bazy danych SQL");
-			} finally {
 				disconnectSQL();
+				throw new SQLException("Nie uda³o siê zapisaæ do bazy danych SQL");
 			}
 		}
+		disconnectSQL();
 	}
 
 	/**

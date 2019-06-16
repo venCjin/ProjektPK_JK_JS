@@ -113,7 +113,7 @@ public class Event implements Comparable<Event>, Serializable {
 	 * 
 	 * @param startDate Data rozpoczecia wydarzenia
 	 */
-	public void setDataRozp(Date startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
