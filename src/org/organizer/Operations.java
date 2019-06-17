@@ -135,7 +135,7 @@ public class Operations {
 	 * @param startDate Data pocz¹tku wydarzenia
 	 * @param endDate   Data koñca wydarzenia
 	 * @param alarmDate Data alarmu
-	 * @throws EventException
+	 * @throws EventException Wyjatek z wiadomoscia jakie dane do utworzenia wydarzenia sa niepoprawne
 	 */
 	public static void addEvent(String name, String desc, String place, Date startDate, Date endDate, Date alarmDate)
 			throws EventException {
@@ -168,6 +168,15 @@ public class Operations {
 		sortDate();
 	}
 
+	/**
+	 * Usuwa wydarzenie z kontenera danych.
+	 * 
+	 * @param e Wydarzenie do usuniecia
+	 */
+	public static void deleteEvent(Event e) {
+		Data.AllEvents.remove(e);
+	}
+	
 	/**
 	 * Zwraca listê wydarzeñ dla danego dnia.
 	 * 
@@ -243,7 +252,7 @@ public class Operations {
 	 * szukanych wydarzeñ.
 	 * 
 	 * @param d Data
-	 * @throws DateTimeException
+	 * @throws DateTimeException Jest rzucany jeœli data jest niepoprawna
 	 */
 	public static void deleteEventsBefore(Date d) throws DateTimeException {
 		d = Operations.parseDate(d);
@@ -294,6 +303,7 @@ public class Operations {
 	 * Koloruje na wybrany kolor dni, w których s¹ wyszukane wydarzenia.
 	 * 
 	 * @param calendar Kalendarz, obiekt klasy JCalendar
+	 * @param events   Lista wszystkich wydarzen
 	 * @param c        Kolor
 	 */
 	public static void colorEventsInMonth(JCalendar calendar, List<Event> events, Color c) {
