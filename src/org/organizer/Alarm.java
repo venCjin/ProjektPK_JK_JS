@@ -51,7 +51,6 @@ public class Alarm extends Timer {
 		public void run() {
 			Toolkit.getDefaultToolkit().beep();
 			if (isGUI) {
-				System.out.println("Masz nadchodz¹ce wydarzenie:\n" + this.e.toString());
 				JOptionPane.showMessageDialog(null, "Masz nadchodz¹ce wydarzenie:\n" + this.e.toString(), "Alarm",
 						JOptionPane.WARNING_MESSAGE);
 			} else {
