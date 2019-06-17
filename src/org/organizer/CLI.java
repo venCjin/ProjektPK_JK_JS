@@ -1,5 +1,6 @@
 package org.organizer;
 
+import java.awt.EventQueue;
 import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.time.DateTimeException;
@@ -78,7 +79,7 @@ public class CLI {
 		
 		Operations.searchEvents(phrase);
 		
-		delOrEdit(Data.SearchedEvents, "Wyszukane wydarzenia:");
+		delEvt(Data.SearchedEvents, "Wyszukane wydarzenia:");
 	}
 
 	/**
@@ -107,7 +108,7 @@ public class CLI {
 
 		List<Event> dayEvents = Operations.getEventsForDay(Operations.parseStringToDate(date, "dd-MM-yyyy"));
 
-		delOrEdit(dayEvents, "Wydarzenia trwaj¹ce tego dnia:");
+		delEvt(dayEvents, "Wydarzenia trwaj¹ce tego dnia:");
 	}
 
 	/**
@@ -275,7 +276,7 @@ public class CLI {
 	 * @param events Lista wydarzeñ do edycji lub usuniecia
 	 * @param text Napis przed wyswietlan¹ list¹ wydarzeñ
 	 */
-	private static void delOrEdit(List<Event> events, String text) {
+	private static void delEvt(List<Event> events, String text) {
 		String option;
 		while (true) {
 			if (events.size() < 1) {
@@ -288,15 +289,14 @@ public class CLI {
 					System.out.println("[" + ++i + "] " + e.toString());
 				}
 
-				System.out.println("Czy chcesz usun¹æ lub edytowaæ jedno z wydarzen?");
+				System.out.println("Czy chcesz usun¹æ jedno z wydarzen?");
 				System.out.println("[u] - usun");
-				System.out.println("[e] - edytuj");
 				System.out.println("[q] - wyjdŸ");
 				System.out.print("opcja> "); option = terminal.next();
 
 				if (option.equals("q"))
 					return;
-				if (!option.equals("u") && !option.equals("e")) {
+				if (!option.equals("u")) {
 					System.err.println("Niepoprawna opcja");
 					continue;
 				}
@@ -318,36 +318,14 @@ public class CLI {
 					continue;
 				}
 
-				switch (option) {
-				case "u":
-					Operations.deleteEvent(e);
-					events.remove(i);
-					System.out.println("Operacja zakoñczona powodzeniem.");
-					break;
-				case "e":
-					// TODO edit
+				Operations.deleteEvent(e);
+				events.remove(i);
+				System.out.println("Operacja zakoñczona powodzeniem.");
+					
+			}
+		}
+	}
 
-					break;
-				default:
-					System.err.println("Niepoprawna opcja");
-				}
-			}
-		}
-	}
-	
-	private static void alarm(Alarm alarm, boolean gui) {
-		if(alarm.getShow()) {
-			Toolkit.getDefaultToolkit().beep();
-			if(gui) {
-				JOptionPane.showMessageDialog(null, "Masz nadchodz¹ce wydarzenie:\n" + alarm.getEvent().toString(),
-					"Alarm", JOptionPane.WARNING_MESSAGE);
-				System.out.println("Masz nadchodz¹ce wydarzenie:\n" + alarm.getEvent().toString());
-			}
-			else
-				System.out.println("Masz nadchodz¹ce wydarzenie:\n" + alarm.getEvent().toString());
-			alarm.seenAlarm();
-		}
-	}
 	
 	/**
 	 * Uruchamia program z argumentami
@@ -359,10 +337,10 @@ public class CLI {
 /* dane wstepne */
 /* do testów */
 		Calendar tmpCalendar = Calendar.getInstance();
-		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE)+1);
+		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE));
 		try {
 			Operations.addEvent("1", "", "", Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+1 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"));
+					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+1 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":30", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
@@ -402,18 +380,16 @@ public class CLI {
 		if (args.length > 0) {
 			if (args[0].equals("GUI")) {
 				
-				Alarm alarm = new Alarm();
+				Alarm alarm = new Alarm(true);
 				OrganizerWindow.show();
-				while(true) alarm(alarm, true);
 				
 			} else if (args[0].equals("CLI")) {
 				
 				System.out.println("Witaj w Organizerze");
 				System.out.println("Napisz 'help' by uzyskac pomoc");
 				
-				Alarm alarm = new Alarm();
+				Alarm alarm = new Alarm(false);
 				do {
-					alarm(alarm, false);
 					System.out.print("polecenie> ");
 				} while (command(terminal.next()));
 				

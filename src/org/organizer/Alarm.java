@@ -1,55 +1,29 @@
 package org.organizer;
 
+import java.awt.Toolkit;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.swing.JOptionPane;
 
 /**
  * 
  */
 public class Alarm extends Timer {
 
-	private List<Event> coming;
-	private boolean toAlarm[];
 	private static final int checkTime = 1000; // 1 sekunda
-	private boolean showAlarm;
-	private Event thisEvent;
+	private boolean isGUI;
 
 	/**
-	 * Alarm dla CLI
+	 * Alarm
 	 */
-	public Alarm() {
+	public Alarm(boolean gui) {
 		super();
-		coming = Operations.getEventsAfterDateWithAlarm(Calendar.getInstance().getTime());
-		toAlarm = new boolean[coming.size()];
-		showAlarm = false;
-		for(int i = 0; i < coming.size(); ++i) toAlarm[i] = true;
-		this.schedule(new CheckAlarm(), 0, checkTime*2);
+		isGUI = gui;
+		this.schedule(new CheckAlarm(), 0, checkTime);
 	}
-
-	/**
-     * Zwraca flage o informacji, czy nalezy pokazac alarm na terminalu zblizajace sie wydarzenie.
-     * 
-     * @return Czy pokazac alarm na terminalu
-     */
-    public boolean getShow() {
-    	return showAlarm;
-    }
-    
-    /**
-     * Zwraca wydarzenie, ktorego termin rozpoczecia sie zbliza.
-     * 
-     * @return Nadchodzace wydarzenie.
-     */
-    public Event getEvent() {
-    	return thisEvent;
-    }
-	
-    public void seenAlarm() {
-    	showAlarm = false;
-    	coming.remove(this.thisEvent);
-    }
     
 	private class CheckAlarm extends TimerTask {
 		
@@ -59,21 +33,23 @@ public class Alarm extends Timer {
 		 * @see java.util.TimerTask#run()
 		 */
 		public void run() {
+			List<Event> coming = Operations.getEventsAfterDateWithAlarm(Calendar.getInstance().getTime());
 			long actualTime = Calendar.getInstance().getTime().getTime();
 			System.out.println("--------");
 			for (int i = 0; i < coming.size(); ++i) {
-//				if(toAlarm[i]) {
-					System.out.println("aktu: " + actualTime);
-					System.out.println("evnt: " + coming.get(i).getAlarmDate().getTime());
-					System.out.println("diff: " + Math.abs(actualTime - coming.get(i).getAlarmDate().getTime()));
-					System.out.println("========");
-					if (60*checkTime > Math.abs(actualTime - coming.get(i).getAlarmDate().getTime())) {
-						showAlarm = true;
-//						thisEvent = new Event(coming.get(i));
-						thisEvent = coming.get(i);
-//						toAlarm[i] = false;
-						break;
-//					}
+				System.out.println("aktu: " + actualTime);
+				System.out.println("evnt: " + coming.get(i).getAlarmDate().getTime());
+				System.out.println("diff: " + Math.abs(actualTime - coming.get(i).getAlarmDate().getTime()));
+				System.out.println("========");
+				if (checkTime > Math.abs(actualTime - coming.get(i).getAlarmDate().getTime())) {
+					Toolkit.getDefaultToolkit().beep();
+					if(isGUI) {
+						System.out.println("Masz nadchodz¹ce wydarzenie:\n" + coming.get(i).toString());
+						JOptionPane.showMessageDialog(null, "Masz nadchodz¹ce wydarzenie:\n" + coming.get(i).toString(),
+							"Alarm", JOptionPane.WARNING_MESSAGE);
+					} else {
+						System.out.println("Masz nadchodz¹ce wydarzenie:\n" + coming.get(i).toString());
+					}
 				}
 			}
 		}

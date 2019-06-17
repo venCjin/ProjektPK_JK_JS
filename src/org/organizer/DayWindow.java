@@ -75,18 +75,12 @@ public class DayWindow {
 			
 			eventBtn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent btn) {
-					String[] options = new String[] { "OK", "USUÑ", "EDYTUJ" };
+					String[] options = new String[] { "OK", "USUÑ" };
 					int choice = JOptionPane.showOptionDialog(null, e.toString(), "Wydarzenie: " + e.getName(), JOptionPane.DEFAULT_OPTION,
 							JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
 					if (choice == 1) {
 						Operations.deleteEvent(e);
 						frame.remove((Component) btn.getSource());
-						frame.repaint();
-					}
-					if (choice == 2) {
-						EditEventWindow.show(e);
-						Component j = (Component)btn.getSource();
-						j.setName(e.getName());
 						frame.repaint();
 					}
 				}
