@@ -102,13 +102,16 @@ public class DayWindow {
 			int eH = endTime.get(Calendar.HOUR_OF_DAY);
 			int eM = endTime.get(Calendar.MINUTE);
 
-			if (e.getStartDate().before(Operations.parseDate(today, 0, 0, 0)))
+			if (e.getStartDate().before(Operations.parseDate(today, 0, 0, 0))) {
 				y = 0;
-			else
+			} else {
 				y = getButtonHeight(sH, sM);
+			}
 
 			if (e.getEndDate().after(Operations.parseDate(today, 24, 59, 59)))
 				duration = 624 - y;
+			else if(y==0)
+				duration = getButtonHeight(eH, eM);
 			else
 				duration = getButtonHeight(eH - sH, eM - sM);
 

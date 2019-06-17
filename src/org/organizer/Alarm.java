@@ -1,7 +1,6 @@
 package org.organizer;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,7 +10,6 @@ import java.util.TimerTask;
  */
 public class Alarm extends Timer {
 
-	private Date date;
 	private List<Event> coming;
 	private boolean toAlarm[];
 	private static final int checkTime = 1000; // 1 sekunda
@@ -23,12 +21,11 @@ public class Alarm extends Timer {
 	 */
 	public Alarm() {
 		super();
-		date = Calendar.getInstance().getTime();
-		coming = Operations.getEventsFromDateWithAlarm(date);
+		coming = Operations.getEventsAfterDateWithAlarm(Calendar.getInstance().getTime());
 		toAlarm = new boolean[coming.size()];
 		showAlarm = false;
 		for(int i = 0; i < coming.size(); ++i) toAlarm[i] = true;
-		this.schedule(new ShowAlarm(), 0, checkTime);
+		this.schedule(new CheckAlarm(), 0, checkTime*2);
 	}
 
 	/**
@@ -51,9 +48,10 @@ public class Alarm extends Timer {
 	
     public void seenAlarm() {
     	showAlarm = false;
+    	coming.remove(this.thisEvent);
     }
     
-	private class ShowAlarm extends TimerTask {
+	private class CheckAlarm extends TimerTask {
 		
 		/**
 		 * (non-Javadoc)
@@ -61,14 +59,21 @@ public class Alarm extends Timer {
 		 * @see java.util.TimerTask#run()
 		 */
 		public void run() {
+			long actualTime = Calendar.getInstance().getTime().getTime();
+			System.out.println("--------");
 			for (int i = 0; i < coming.size(); ++i) {
-				if(toAlarm[i]) {
-					if (checkTime < Math.abs(date.getTime() - coming.get(i).getAlarmDate().getTime())) {
+//				if(toAlarm[i]) {
+					System.out.println("aktu: " + actualTime);
+					System.out.println("evnt: " + coming.get(i).getAlarmDate().getTime());
+					System.out.println("diff: " + Math.abs(actualTime - coming.get(i).getAlarmDate().getTime()));
+					System.out.println("========");
+					if (60*checkTime > Math.abs(actualTime - coming.get(i).getAlarmDate().getTime())) {
 						showAlarm = true;
-						thisEvent = new Event(coming.get(i));
-						toAlarm[i] = false;
+//						thisEvent = new Event(coming.get(i));
+						thisEvent = coming.get(i);
+//						toAlarm[i] = false;
 						break;
-					}
+//					}
 				}
 			}
 		}

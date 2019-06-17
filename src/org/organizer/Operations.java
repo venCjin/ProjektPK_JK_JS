@@ -1,7 +1,6 @@
 package org.organizer;
 
 import java.awt.Color;
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
@@ -223,11 +222,11 @@ public class Operations {
 		Data.AllEvents.remove(e);
 	}
 
-	public static List<Event> getEventsFromDateWithAlarm(Date d) {
+	public static List<Event> getEventsAfterDateWithAlarm(Date d) {
 		List<Event> found = new ArrayList<Event>();
 		
 		for(Event e : Data.AllEvents) {
-			if (e.getEndDate().before(d) && e.getAlarmDate() != null)
+			if (e.getStartDate().after(d) && e.getAlarmDate() != null)
 				found.add(new Event(e));
 		}
 		

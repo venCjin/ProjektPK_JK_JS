@@ -3,6 +3,7 @@ package org.organizer;
 import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.time.DateTimeException;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
 
@@ -337,9 +338,11 @@ public class CLI {
 	private static void alarm(Alarm alarm, boolean gui) {
 		if(alarm.getShow()) {
 			Toolkit.getDefaultToolkit().beep();
-			if(gui)
+			if(gui) {
 				JOptionPane.showMessageDialog(null, "Masz nadchodz¹ce wydarzenie:\n" + alarm.getEvent().toString(),
 					"Alarm", JOptionPane.WARNING_MESSAGE);
+				System.out.println("Masz nadchodz¹ce wydarzenie:\n" + alarm.getEvent().toString());
+			}
 			else
 				System.out.println("Masz nadchodz¹ce wydarzenie:\n" + alarm.getEvent().toString());
 			alarm.seenAlarm();
@@ -355,21 +358,25 @@ public class CLI {
 
 /* dane wstepne */
 /* do testów */
+		Calendar tmpCalendar = Calendar.getInstance();
+		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE)+1);
 		try {
-			Operations.addEvent("1", "", "", Operations.parseStringToDate("17-06-2019 01:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("17-06-2019 02:30:00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("16-06-2019 11:28:00", "dd-MM-yyyy HH:mm:ss"));
+			Operations.addEvent("1", "", "", Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+1 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
+		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE)+1);
 		try {
-			Operations.addEvent("2", "", "", Operations.parseStringToDate("17-06-2019 03:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("17-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"), null);
+			Operations.addEvent("2", "", "", Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+1+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+2 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
+		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE)+1);
 		try {
-			Operations.addEvent("3", "", "", Operations.parseStringToDate("17-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("17-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
+			Operations.addEvent("3", "", "", Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+2+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+3 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
@@ -380,9 +387,10 @@ public class CLI {
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
+		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE)+1);
 		try {
-			Operations.addEvent("alolblee kk", "", "", Operations.parseStringToDate("17-06-2019 08:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("18-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
+			Operations.addEvent("alolblee kk", "", "", Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+3+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+4 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
@@ -396,7 +404,7 @@ public class CLI {
 				
 				Alarm alarm = new Alarm();
 				OrganizerWindow.show();
-				alarm(alarm, true);
+				while(true) alarm(alarm, true);
 				
 			} else if (args[0].equals("CLI")) {
 				
@@ -406,6 +414,7 @@ public class CLI {
 				Alarm alarm = new Alarm();
 				do {
 					alarm(alarm, false);
+					System.out.print("polecenie> ");
 				} while (command(terminal.next()));
 				
 			} else {
