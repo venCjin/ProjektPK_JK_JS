@@ -22,7 +22,7 @@ public class CSVData {
 	 * Zapisuje wszystkie wydarzenia do pliku export.csv
 	 * 
 	 * @param events Lista wszystkich wydarzeñ do zapisania
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	static public void writeCSV(List<Event> events) throws Exception {
 		try {
@@ -58,7 +58,7 @@ public class CSVData {
 	 * Wczytuje i zwraca listê wszystkich wydarzeñ zapisanych w pliku export.csv
 	 * 
 	 * @return Lista wszystkich wydarzeñ zapisanych w pliku export.csv
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	static public List<Event> readCSV() throws Exception {
 		BufferedReader br = null;
@@ -68,9 +68,7 @@ public class CSVData {
 			br = new BufferedReader(new FileReader("export.csv"));
 			while ((line = br.readLine()) != null) {
 				String[] attributes = line.split(CSV_SEPARATOR);
-				Event event = new Event(attributes[0],
-						attributes[1],
-						attributes[2],
+				Event event = new Event(attributes[0], attributes[1], attributes[2],
 						Operations.parseStringToDate(attributes[3], "dd-MM-yyyy HH:mm:ss"),
 						Operations.parseStringToDate(attributes[4], "dd-MM-yyyy HH:mm:ss"),
 						Operations.parseStringToDate(attributes[5], "dd-MM-yyyy HH:mm:ss"));
@@ -87,7 +85,8 @@ public class CSVData {
 				try {
 					br.close();
 				} catch (IOException e) {
-					throw new Exception("Nie uda³o siê zamkn¹æ strumienia odczytu z pliku export.xml\nOpis: " + e.getMessage());
+					throw new Exception(
+							"Nie uda³o siê zamkn¹æ strumienia odczytu z pliku export.xml\nOpis: " + e.getMessage());
 				}
 			}
 		}

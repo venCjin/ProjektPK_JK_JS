@@ -18,7 +18,7 @@ public class XMLData {
 	 * Zapisuje wszystkie wydarzenia do pliku export.xml
 	 * 
 	 * @param events Lista wszystkich wydarzeñ do zapisania
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static void writeXML(List<Event> events) throws Exception {
 		try {
@@ -41,7 +41,7 @@ public class XMLData {
 	 * Wczytuje i zwraca listê wszystkich wydarzeñ zapisanych w pliku export.xml
 	 * 
 	 * @return Lista wszystkich wydarzeñ zapisanych w pliku export.xml
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
 	public static List<Event> readXML() throws Exception {

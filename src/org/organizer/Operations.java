@@ -12,6 +12,9 @@ import java.util.List;
 import javax.swing.JButton;
 import com.toedter.calendar.JCalendar;
 
+/**
+ * Klasa zawieraj¹ca metody odpowiedzialne za logike aplikacji.
+ */
 public class Operations {
 
 	/**
@@ -151,7 +154,7 @@ public class Operations {
 
 		for (Event e : Data.AllEvents) {
 			if ((startDate.after(e.getStartDate()) || startDate.equals(e.getStartDate()))
-							&& (endDate.before(e.getEndDate()) || endDate.equals(e.getEndDate())))
+					&& (endDate.before(e.getEndDate()) || endDate.equals(e.getEndDate())))
 				throw new EventException("Nowe wydarzenie odbywa siê w trakcie innego.");
 
 			if (startDate.before(e.getEndDate()) && endDate.after(e.getEndDate()))
@@ -174,12 +177,12 @@ public class Operations {
 	public static List<Event> getEventsForDay(Date day) {
 		if (day == null)
 			return null;
-		
+
 		Date start = Operations.parseDate(day, 0, 0, 0);
 		Date end = Operations.parseDate(day, 24, 59, 59);
-		
+
 		List<Event> dayEvents = new ArrayList<Event>();
-		
+
 		for (Event e : Data.AllEvents) {
 			if (e.getEndDate().before(start))
 				continue;
@@ -194,7 +197,7 @@ public class Operations {
 	 * Zwraca listê wydarzeñ dla danego miesiaca.
 	 * 
 	 * @param calendar Kalendarz, obiekt klasy JCalendar
-	 * @param events Lista wydarzeñ do przeszukania
+	 * @param events   Lista wydarzeñ do przeszukania
 	 * @return Lista wydarzeñ z danego miesiaca
 	 */
 	public static List<Event> getEventsForActualMonth(JCalendar calendar, List<Event> events) {
@@ -202,11 +205,11 @@ public class Operations {
 		Calendar tmpCalendar = (Calendar) calendar.getCalendar().clone();
 		tmpCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		Date start = parseDate(tmpCalendar.getTime());
-		
+
 		tmpCalendar.add(Calendar.MONTH, 1);
 		tmpCalendar.add(Calendar.DAY_OF_MONTH, -1);
 		Date end = parseDate(tmpCalendar.getTime(), 24, 59, 59);
-		
+
 		List<Event> monthEvents = new ArrayList<Event>();
 		for (Event e : events) {
 			if (e.getEndDate().before(start))
@@ -217,24 +220,27 @@ public class Operations {
 		}
 		return monthEvents;
 	}
-	
-	public static void deleteEvent(Event e) {
-		Data.AllEvents.remove(e);
-	}
 
+	/**
+	 * Zwraca liste wydarzen po danej dacie dla ktorych ma zostac wyswietlony alarm.
+	 * 
+	 * @param d Data po ktorej maja zostac znalezione wydarzenia z alarmem
+	 * @return Lista wydarzen po danej dacie
+	 */
 	public static List<Event> getEventsAfterDateWithAlarm(Date d) {
 		List<Event> found = new ArrayList<Event>();
-		
-		for(Event e : Data.AllEvents) {
+
+		for (Event e : Data.AllEvents) {
 			if (e.getStartDate().after(d) && e.getAlarmDate() != null)
 				found.add(new Event(e));
 		}
-		
+
 		return found;
 	}
-	
+
 	/**
-	 * Usuwa wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹ i czyœci liste szukanych wydarzeñ.
+	 * Usuwa wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹ i czyœci liste
+	 * szukanych wydarzeñ.
 	 * 
 	 * @param d Data
 	 * @throws DateTimeException
@@ -245,12 +251,12 @@ public class Operations {
 			throw new DateTimeException("Niepoprawna data.");
 
 		Data.SearchedEvents = new ArrayList<Event>(Data.AllEvents);
-		
-		for(Event e : Data.SearchedEvents) {
+
+		for (Event e : Data.SearchedEvents) {
 			if (e.getEndDate().before(d))
 				Data.AllEvents.remove(e);
 		}
-		
+
 		Data.SearchedEvents.clear();
 	}
 
@@ -284,19 +290,6 @@ public class Operations {
 		return "ORGANIZER\nProgram stworzony na laboratoriach Programowania Komponentowego\nAutorzy: Jakub Klepacz, Jaros³aw Suchiñski";
 	}
 
-	/*
-	 * Metody obs³uguj¹ce GUI
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
 	/**
 	 * Koloruje na wybrany kolor dni, w których s¹ wyszukane wydarzenia.
 	 * 
@@ -304,12 +297,12 @@ public class Operations {
 	 * @param c        Kolor
 	 */
 	public static void colorEventsInMonth(JCalendar calendar, List<Event> events, Color c) {
-		
+
 		List<Event> l = getEventsForActualMonth(calendar, events);
 		Calendar start = (Calendar) calendar.getCalendar().clone();
 		Calendar end = (Calendar) calendar.getCalendar().clone();
-		
-		for(Event e : l) {
+
+		for (Event e : l) {
 			start.setTime(e.getStartDate());
 			end.setTime(e.getEndDate());
 			JButton j = getDayButton(calendar, start.get(Calendar.DAY_OF_MONTH));
@@ -325,17 +318,17 @@ public class Operations {
 	 * @return JButton okreœlonego dania miesiaca
 	 */
 	public static JButton getDayButton(JCalendar calendar, int day) {
-		
+
 		Calendar tmpCalendar = (Calendar) calendar.getCalendar().clone(); // aktualna data
 		tmpCalendar.set(Calendar.DAY_OF_MONTH, 1); // pierwszy dzieñ miesiaca
-		
+
 		int offset = tmpCalendar.get(Calendar.DAY_OF_WEEK); // 1==nd
-		if (offset == 1)	// jesli niedziela(==1) to 6 buttonow przed nia nieaktywnych
+		if (offset == 1) // jesli niedziela(==1) to 6 buttonow przed nia nieaktywnych
 			offset = 6;
-		else				// jesli pon(==2) to 0 buttonow przed nia nieaktywnych
+		else // jesli pon(==2) to 0 buttonow przed nia nieaktywnych
 			offset -= 2;
-		offset += 6;		// 7 buttonow nieaktywnych wyswietlajacych dni tygonia
-							// ustawiamy na ostatnim bo jesli day==1 to
+		offset += 6; // 7 buttonow nieaktywnych wyswietlajacych dni tygonia
+						// ustawiamy na ostatnim bo jesli day==1 to
 		if (day < 1)
 			day = 1;
 

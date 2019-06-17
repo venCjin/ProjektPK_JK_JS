@@ -9,49 +9,56 @@ import java.util.TimerTask;
 import javax.swing.JOptionPane;
 
 /**
- * 
+ * Tworzy alarmy dla wydarzen
  */
 public class Alarm extends Timer {
 
-	private static final int checkTime = 1000; // 1 sekunda
 	private boolean isGUI;
+	private List<Event> coming;
 
 	/**
-	 * Alarm
+	 * Tworzy alarmy dla wydarzen
+	 * 
+	 * @param gui Czy wyswietlic okno dialogowe
 	 */
 	public Alarm(boolean gui) {
 		super();
 		isGUI = gui;
-		this.schedule(new CheckAlarm(), 0, checkTime);
+
+		coming = Operations.getEventsAfterDateWithAlarm(Calendar.getInstance().getTime());
+
+		for (Event e : coming)
+			this.schedule(new RingAlarm(e), e.getAlarmDate());
 	}
-    
-	private class CheckAlarm extends TimerTask {
-		
+
+	public void eventWithAlarmAdded(Event e) {
+		this.schedule(new RingAlarm(e), e.getAlarmDate());
+	}
+
+	private class RingAlarm extends TimerTask {
+
+		private Event e;
+
+		public RingAlarm(Event e) {
+			this.e = e;
+		}
+
 		/**
 		 * (non-Javadoc)
 		 * 
 		 * @see java.util.TimerTask#run()
 		 */
 		public void run() {
-			List<Event> coming = Operations.getEventsAfterDateWithAlarm(Calendar.getInstance().getTime());
-			long actualTime = Calendar.getInstance().getTime().getTime();
-			System.out.println("--------");
-			for (int i = 0; i < coming.size(); ++i) {
-				System.out.println("aktu: " + actualTime);
-				System.out.println("evnt: " + coming.get(i).getAlarmDate().getTime());
-				System.out.println("diff: " + Math.abs(actualTime - coming.get(i).getAlarmDate().getTime()));
-				System.out.println("========");
-				if (checkTime > Math.abs(actualTime - coming.get(i).getAlarmDate().getTime())) {
-					Toolkit.getDefaultToolkit().beep();
-					if(isGUI) {
-						System.out.println("Masz nadchodz¹ce wydarzenie:\n" + coming.get(i).toString());
-						JOptionPane.showMessageDialog(null, "Masz nadchodz¹ce wydarzenie:\n" + coming.get(i).toString(),
-							"Alarm", JOptionPane.WARNING_MESSAGE);
-					} else {
-						System.out.println("Masz nadchodz¹ce wydarzenie:\n" + coming.get(i).toString());
-					}
-				}
+			Toolkit.getDefaultToolkit().beep();
+			if (isGUI) {
+				System.out.println("Masz nadchodz¹ce wydarzenie:\n" + this.e.toString());
+				JOptionPane.showMessageDialog(null, "Masz nadchodz¹ce wydarzenie:\n" + this.e.toString(), "Alarm",
+						JOptionPane.WARNING_MESSAGE);
+			} else {
+				System.out.println("Masz nadchodz¹ce wydarzenie:\n" + this.e.toString());
 			}
 		}
+
 	}
+
 }

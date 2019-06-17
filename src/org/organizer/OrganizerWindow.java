@@ -19,11 +19,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 
 /**
- * Organizer. G³ówne okno programu, wyœwietla kalendarz i menu. 
+ * Organizer. G³ówne okno programu, wyœwietla kalendarz i menu.
  */
 public class OrganizerWindow {
 	private JFrame frame;
 	private Color searchedEventColor = Color.YELLOW;
+	Alarm alarm = new Alarm(true);
 
 	/**
 	 * Tworzy okno programu Organizera.
@@ -40,7 +41,7 @@ public class OrganizerWindow {
 			}
 		});
 	}
-	
+
 	private OrganizerWindow() {
 		initialize();
 	}
@@ -57,10 +58,7 @@ public class OrganizerWindow {
 
 		JCalendar calendar = new JCalendar();
 		calendar.setTodayButtonVisible(true);
-		
-// TODO		
-//		Operations.getDayButton(calendar, calendar.getDayChooser().getDay()).setBackground(new JButton().getBackground());
-		
+
 		calendar.getDayChooser().setAlwaysFireDayProperty(true);
 		calendar.getDayChooser().addPropertyChangeListener("day", new PropertyChangeListener() {
 			@Override
@@ -81,7 +79,7 @@ public class OrganizerWindow {
 		mntmAdd.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
 		mntmAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				AddEventWindow.show(calendar);
+				AddEventWindow.show(calendar, alarm);
 			}
 		});
 		mnEvents.add(mntmAdd);
@@ -116,9 +114,11 @@ public class OrganizerWindow {
 				try {
 					sql.deleteAllEventsSQL();
 					sql.writeAllEventsSQL(Data.AllEvents);
-					JOptionPane.showMessageDialog(new JFrame(), "Zapis do bazy danych SQL powiód³ siê.", "Zapis", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), "Zapis do bazy danych SQL powiód³ siê.", "Zapis",
+							JOptionPane.PLAIN_MESSAGE);
 				} catch (SQLException e1) {
-					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -129,9 +129,11 @@ public class OrganizerWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					XMLData.writeXML(Data.AllEvents);
-					JOptionPane.showMessageDialog(new JFrame(), "Zapis do pliku XML powiód³ siê.", "Zapis", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), "Zapis do pliku XML powiód³ siê.", "Zapis",
+							JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "XML Exception", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "XML Exception",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -142,9 +144,11 @@ public class OrganizerWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					CSVData.writeCSV(Data.AllEvents);
-					JOptionPane.showMessageDialog(new JFrame(), "Zapis do bazy pliku CSV powiód³ siê.", "Zapis", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), "Zapis do bazy pliku CSV powiód³ siê.", "Zapis",
+							JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "CSV Exception", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "CSV Exception",
+							JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -160,9 +164,11 @@ public class OrganizerWindow {
 				try {
 					Data.AllEvents = sql.readAllEventsSQL();
 					System.out.println(Data.AllEvents);
-					JOptionPane.showMessageDialog(new JFrame(), "Odczyt z bazy danych SQL powiód³ siê.", "Odczyt", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), "Odczyt z bazy danych SQL powiód³ siê.", "Odczyt",
+							JOptionPane.PLAIN_MESSAGE);
 				} catch (SQLException e1) {
-					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception",
+							JOptionPane.ERROR_MESSAGE);
 				}
 //				Operations.colorSearchedEvents(calendar, searchedEventColor);
 			}
@@ -174,9 +180,11 @@ public class OrganizerWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Data.AllEvents = XMLData.readXML();
-					JOptionPane.showMessageDialog(new JFrame(), "Odczyt z pliku XML powiód³ siê.", "Odczyt", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), "Odczyt z pliku XML powiód³ siê.", "Odczyt",
+							JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "XML Exception", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "XML Exception",
+							JOptionPane.ERROR_MESSAGE);
 				}
 //				Operations.colorSearchedEvents(calendar, searchedEventColor);
 			}
@@ -188,9 +196,11 @@ public class OrganizerWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Data.AllEvents = CSVData.readCSV();
-					JOptionPane.showMessageDialog(new JFrame(), "Odczyt z pliku CSV powiód³ siê.", "Odczyt", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), "Odczyt z pliku CSV powiód³ siê.", "Odczyt",
+							JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "CSV Exception", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "CSV Exception",
+							JOptionPane.ERROR_MESSAGE);
 				}
 //				Operations.colorSearchedEvents(calendar, searchedEventColor);
 			}
@@ -218,9 +228,7 @@ public class OrganizerWindow {
 		JMenuItem mntmInfo = new JMenuItem("O programie");
 		mntmInfo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null,
-						Operations.info(),
-						"Informacje o programie", 1);
+				JOptionPane.showMessageDialog(null, Operations.info(), "Informacje o programie", 1);
 			}
 		});
 		mnInfo.add(mntmInfo);

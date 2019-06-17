@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-	
+
 /**
  * Klasa reprezentujaca okno JFrame dodawania wydarzenia do kalendarza.
  */
@@ -35,11 +35,11 @@ public class AddEventWindow {
 	/**
 	 * Pokazuje okno do dodania nowego wydarzenia.
 	 */
-	public static void show(JCalendar calendar) {
+	public static void show(JCalendar calendar, Alarm alarm) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AddEventWindow window = new AddEventWindow(calendar);
+					AddEventWindow window = new AddEventWindow(calendar, alarm);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,14 +51,14 @@ public class AddEventWindow {
 	/**
 	 * Inicjalizuje okno do dodania nowego wydarzenia.
 	 */
-	protected AddEventWindow(JCalendar calendar) {
-		initialize(calendar);
+	protected AddEventWindow(JCalendar calendar, Alarm alarm) {
+		initialize(calendar, alarm);
 	}
 
 	/**
 	 * Inicjalizuje zawartoœæ okna do dodania nowego wydarzenia.
 	 */
-	private void initialize(JCalendar calendar) {
+	private void initialize(JCalendar calendar, Alarm alarm) {
 		frame = new JFrame("Dodaj wydarzenie");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setResizable(false);
@@ -159,49 +159,60 @@ public class AddEventWindow {
 		endMinSpin.setModel(new SpinnerNumberModel(0, 0, 59, 1));
 		endMinSpin.setBounds(341, 162, 44, 20);
 		frame.getContentPane().add(endMinSpin);
-		
+
 		JSpinner alarmHourSpin = new JSpinner();
 		alarmHourSpin.setModel(new SpinnerNumberModel(0, 0, 23, 1));
 		alarmHourSpin.setBounds(287, 188, 44, 20);
 		alarmHourSpin.setEnabled(false);
 		frame.getContentPane().add(alarmHourSpin);
-		
+
 		JLabel lbl3 = new JLabel(":");
 		lbl3.setBounds(334, 188, 11, 20);
 		frame.getContentPane().add(lbl3);
-		
+
 		JSpinner alarmMinSpin = new JSpinner();
 		alarmMinSpin.setModel(new SpinnerNumberModel(0, 0, 59, 1));
 		alarmMinSpin.setBounds(341, 188, 44, 20);
 		alarmMinSpin.setEnabled(false);
 		frame.getContentPane().add(alarmMinSpin);
-		
-				JButton btnOk = new JButton("OK");
-				btnOk.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						String name = nameField.getText();
-						String desc = descField.getText();
-						String place = placeField.getText();
-						Date alarmDate = null;
-						try {
-							if (alarmChckbx.isSelected()) alarmDate = Operations.parseDate(alarmChooser.getDate(), (int) alarmHourSpin.getValue(),
-									(int) alarmMinSpin.getValue(), 0);
-								
-							Operations.addEvent(name, desc, place,
-									Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
-											(int) startMinSpin.getValue(), 0),
-									Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
-											(int) endMinSpin.getValue(), 0),
-									alarmDate);
-							calendar.repaint();
-							frame.dispose();
-						} catch (EventException err) {
-							JOptionPane.showMessageDialog(new JFrame(), err.getMessage(), "EventException", JOptionPane.ERROR_MESSAGE);
-						}
-					}
-				});
-				btnOk.setBounds(356, 237, 68, 23);
-				frame.getContentPane().add(btnOk);
+
+		JButton btnOk = new JButton("OK");
+		btnOk.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = nameField.getText();
+				String desc = descField.getText();
+				String place = placeField.getText();
+				Date alarmDate = null;
+				try {
+					if (alarmChckbx.isSelected())
+						alarmDate = Operations.parseDate(alarmChooser.getDate(), (int) alarmHourSpin.getValue(),
+								(int) alarmMinSpin.getValue(), 0);
+
+					Operations.addEvent(name, desc, place,
+							Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
+									(int) startMinSpin.getValue(), 0),
+							Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
+									(int) endMinSpin.getValue(), 0),
+							alarmDate);
+
+					if (alarmDate != null)
+						alarm.eventWithAlarmAdded(new Event(name, desc, place,
+								Operations.parseDate(startDateChooser.getDate(), (int) startHourSpin.getValue(),
+										(int) startMinSpin.getValue(), 0),
+								Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
+										(int) endMinSpin.getValue(), 0),
+								alarmDate));
+
+					calendar.repaint();
+					frame.dispose();
+				} catch (EventException err) {
+					JOptionPane.showMessageDialog(new JFrame(), err.getMessage(), "EventException",
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		btnOk.setBounds(356, 237, 68, 23);
+		frame.getContentPane().add(btnOk);
 
 		alarmChckbx.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent arg0) {

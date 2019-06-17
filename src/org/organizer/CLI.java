@@ -1,14 +1,10 @@
 package org.organizer;
 
-import java.awt.EventQueue;
-import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Scanner;
-
-import javax.swing.JOptionPane;
 
 public class CLI {
 
@@ -27,44 +23,43 @@ public class CLI {
 		terminal.nextLine();
 
 		System.out.println("Podaj nazwe wydarzenia : ");
-		System.out.print("nazwa> "); name = terminal.nextLine();
+		System.out.print("nazwa> ");
+		name = terminal.nextLine();
 
 		System.out.println("Podaj opis wydarzenia (opcjonalne) : ");
-		System.out.print("opis> "); desc = terminal.nextLine();
+		System.out.print("opis> ");
+		desc = terminal.nextLine();
 
 		System.out.println("Podaj miejsce wydarzenia (opcjonalne) : ");
-		System.out.print("miejsce> "); place = terminal.nextLine();
+		System.out.print("miejsce> ");
+		place = terminal.nextLine();
 
 		System.out.println("Podaj date rozpoczecia wydarzenia w formacie dd-MM-yyyy HH:mm:ss : ");
-		System.out.print("data rozpoczecia> "); startDate = terminal.next();
+		System.out.print("data rozpoczecia> ");
+		startDate = terminal.next();
 		startDate += " " + terminal.next();
 
 		System.out.println("Podaj date zakonczenia wydarzenia w formacie dd-MM-yyyy HH:mm:ss : ");
-		System.out.print("data zakonczenia> "); endDate = terminal.next();
+		System.out.print("data zakonczenia> ");
+		endDate = terminal.next();
 		endDate += " " + terminal.next();
 
 		System.out.println("Czy chcesz ustwaic alarm? [t/n]");
 		if (terminal.next().equalsIgnoreCase("t")) {
-//			System.out.println("Podaj date alarmu w formacie dd-MM-yyyy  : ");
 			System.out.println("Podaj date alarmu w formacie dd-MM-yyyy HH:mm:ss : ");
-			System.out.print("data alarmu> "); alarmDate = terminal.next();
+			System.out.print("data alarmu> ");
+			alarmDate = terminal.next();
 			alarmDate += " " + terminal.next();
 		}
 
 		try {
-			Operations.addEvent(
-					name,
-					desc,
-					place,
-					Operations.parseStringToDate(startDate, "dd-MM-yyyy HH:mm:ss"),
+			Operations.addEvent(name, desc, place, Operations.parseStringToDate(startDate, "dd-MM-yyyy HH:mm:ss"),
 					Operations.parseStringToDate(endDate, "dd-MM-yyyy HH:mm:ss"),
-//					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy")
-					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy HH:mm:ss")
-					);
+					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			System.err.println(e.getMessage());
 		}
-		
+
 		System.out.println("Dodano wydarzenie.");
 	}
 
@@ -75,10 +70,11 @@ public class CLI {
 		String phrase;
 		terminal.nextLine();
 		System.out.println("Podaj frazê do wyszukania w nazwie wydarzenia :");
-		System.out.print("fraza> "); phrase = terminal.nextLine();
-		
+		System.out.print("fraza> ");
+		phrase = terminal.nextLine();
+
 		Operations.searchEvents(phrase);
-		
+
 		delEvt(Data.SearchedEvents, "Wyszukane wydarzenia:");
 	}
 
@@ -88,7 +84,8 @@ public class CLI {
 	private static void delBefore() {
 		String date;
 		System.out.println("Podaj date (dd-MM-yyyy): ");
-		System.out.print("data> "); date = terminal.next();
+		System.out.print("data> ");
+		date = terminal.next();
 		try {
 			Operations.deleteEventsBefore(Operations.parseStringToDate(date, "dd-MM-yyyy"));
 		} catch (DateTimeException ex) {
@@ -104,7 +101,8 @@ public class CLI {
 	private static void showDay() {
 		String date;
 		System.out.println("Podaj date (dd-MM-yyyy):");
-		System.out.print("data> "); date = terminal.next();
+		System.out.print("data> ");
+		date = terminal.next();
 
 		List<Event> dayEvents = Operations.getEventsForDay(Operations.parseStringToDate(date, "dd-MM-yyyy"));
 
@@ -120,7 +118,8 @@ public class CLI {
 		System.out.println("[1] baza danych SQL");
 		System.out.println("[2] plik XML");
 		System.out.println("[3] plik CSV");
-		System.out.print("opcja> "); option = terminal.next();
+		System.out.print("opcja> ");
+		option = terminal.next();
 
 		switch (option) {
 		case "1":
@@ -163,7 +162,8 @@ public class CLI {
 		System.out.println("[1] baza danych SQL");
 		System.out.println("[2] plik XML");
 		System.out.println("[3] plik CSV");
-		System.out.print("opcja> "); option = terminal.next();
+		System.out.print("opcja> ");
+		option = terminal.next();
 
 		switch (option) {
 		case "1":
@@ -274,7 +274,7 @@ public class CLI {
 	 * Pozwala usuwaæ i edytowaæ wybrane wydarzenia z przekazanej listy.
 	 * 
 	 * @param events Lista wydarzeñ do edycji lub usuniecia
-	 * @param text Napis przed wyswietlan¹ list¹ wydarzeñ
+	 * @param text   Napis przed wyswietlan¹ list¹ wydarzeñ
 	 */
 	private static void delEvt(List<Event> events, String text) {
 		String option;
@@ -292,7 +292,8 @@ public class CLI {
 				System.out.println("Czy chcesz usun¹æ jedno z wydarzen?");
 				System.out.println("[u] - usun");
 				System.out.println("[q] - wyjdŸ");
-				System.out.print("opcja> "); option = terminal.next();
+				System.out.print("opcja> ");
+				option = terminal.next();
 
 				if (option.equals("q"))
 					return;
@@ -300,7 +301,7 @@ public class CLI {
 					System.err.println("Niepoprawna opcja");
 					continue;
 				}
-				
+
 				System.out.println("Podaj index wydarzenia [i]:");
 				System.out.print("index> ");
 				try {
@@ -321,12 +322,11 @@ public class CLI {
 				Operations.deleteEvent(e);
 				events.remove(i);
 				System.out.println("Operacja zakoñczona powodzeniem.");
-					
+
 			}
 		}
 	}
 
-	
 	/**
 	 * Uruchamia program z argumentami
 	 * 
@@ -334,65 +334,85 @@ public class CLI {
 	 */
 	public static void main(String[] args) {
 
-/* dane wstepne */
-/* do testów */
+		/* dane wstepne */
+		/* do testów */
 		Calendar tmpCalendar = Calendar.getInstance();
 		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE));
 		try {
-			Operations.addEvent("1", "", "", Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+1 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":30", "dd-MM-yyyy HH:mm:ss"));
+			Operations.addEvent("1", "", "",
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + 1 + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":30", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
-		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE)+1);
+		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE) + 1);
 		try {
-			Operations.addEvent("2", "", "", Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+1+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+2 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"));
+			Operations.addEvent("2", "", "",
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + 1 + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + 2 + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
-		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE)+1);
+		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE) + 1);
 		try {
-			Operations.addEvent("3", "", "", Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+2+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+3 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"));
+			Operations.addEvent("3", "", "",
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + 2 + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + 3 + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
-		
+
 		try {
-			Operations.addEvent("as", "", "", Operations.parseStringToDate("17-06-2019 07:20:00", "dd-MM-yyyy HH:mm:ss"),
+			Operations.addEvent("as", "", "",
+					Operations.parseStringToDate("17-06-2019 07:20:00", "dd-MM-yyyy HH:mm:ss"),
 					Operations.parseStringToDate("17-06-2019 07:40:00", "dd-MM-yyyy HH:mm:ss"), null);
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
-		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE)+1);
+		tmpCalendar.set(Calendar.MINUTE, tmpCalendar.get(Calendar.MINUTE) + 1);
 		try {
-			Operations.addEvent("alolblee kk", "", "", Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+3+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+4 +":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("17-06-2019 "+tmpCalendar.get(Calendar.HOUR_OF_DAY)+":"+tmpCalendar.get(Calendar.MINUTE)+":00", "dd-MM-yyyy HH:mm:ss"));
+			Operations.addEvent("alolblee kk", "", "",
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + 3 + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + 4 + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 " + tmpCalendar.get(Calendar.HOUR_OF_DAY) + ":"
+							+ tmpCalendar.get(Calendar.MINUTE) + ":00", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
 //		Data.SearchedEvents.add(Data.AllEvents.get(0));
 //		Data.SearchedEvents.add(Data.AllEvents.get(1));
-/* dane wstepne */
-/* do testów */
+		/* dane wstepne */
+		/* do testów */
 
 		if (args.length > 0) {
 			if (args[0].equals("GUI")) {
-				
-				Alarm alarm = new Alarm(true);
+
 				OrganizerWindow.show();
-				
+
 			} else if (args[0].equals("CLI")) {
-				
+
 				System.out.println("Witaj w Organizerze");
 				System.out.println("Napisz 'help' by uzyskac pomoc");
-				
+
 				Alarm alarm = new Alarm(false);
 				do {
 					System.out.print("polecenie> ");
 				} while (command(terminal.next()));
-				
+
 			} else {
 				throw new RuntimeException("Niepoprawne argumenty uruchamiania programu.");
 			}

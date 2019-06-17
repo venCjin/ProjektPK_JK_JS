@@ -15,7 +15,7 @@ import java.sql.ResultSet;
  * Pozwala zapisywaæ i odczytywaæ wydarzenia z bazy danych MSSQL Organizer.
  */
 public class SQLData {
-	
+
 	private static final String connectionUrl = "jdbc:sqlserver://localhost:1433;databaseName=organizer;integratedSecurity=true";
 
 	private Connection con = null;
@@ -24,7 +24,8 @@ public class SQLData {
 
 	/**
 	 * Otwiera po³¹czenie z baz¹ danych MSSQL Organizer.
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	public void connectSQL() throws SQLException {
 		con = DriverManager.getConnection(connectionUrl);
@@ -32,6 +33,7 @@ public class SQLData {
 
 	/**
 	 * Zamyka po³¹czenie z baz¹ danych MSSQL Organizer.
+	 * 
 	 * @throws SQLException
 	 */
 	public void disconnectSQL() throws SQLException {
@@ -39,7 +41,7 @@ public class SQLData {
 			if (con != null) {
 				con.close();
 			}
-		} catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new SQLException("Nie uda³o siê zamkn¹æ po³¹czenia z baz¹ danych\nOpis: " + e.getMessage());
 		}
 	}
@@ -48,7 +50,7 @@ public class SQLData {
 	 * Zapisuje listê podanych wydarzeñ do bazy danych MSSQL Organizer.
 	 * 
 	 * @param events Lista wydarzeñ do zapisania
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public void writeAllEventsSQL(List<Event> events) throws SQLException {
 		connectSQL();
@@ -85,7 +87,8 @@ public class SQLData {
 
 	/**
 	 * Usuwa wszystkie wydarzenia z bazy danych MSSQL Organizer.
-	 * @throws SQLException 
+	 * 
+	 * @throws SQLException
 	 */
 	public void deleteAllEventsSQL() throws SQLException {
 		connectSQL();
@@ -104,7 +107,7 @@ public class SQLData {
 	 * Zwraca listê wszystkich wydarzeñ odczytanych z bazy danych MSSQL Organizer.
 	 * 
 	 * @return Lista wydarzeñ odczytanych z bazy danych MSSQL Organizer.
-	 * @throws SQLException 
+	 * @throws SQLException
 	 */
 	public List<Event> readAllEventsSQL() throws SQLException {
 		connectSQL();

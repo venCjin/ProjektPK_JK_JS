@@ -5,10 +5,11 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
 
+/**
+ * Klasa reprezentujaca pojedyncze wydarzenie dodawane do kalendarza.
+ */
 public class Event implements Comparable<Event>, Serializable {
-	/**
-	 * Klasa reprezentujaca pojedyncze wydarzenie dodawane do kalendarza.
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String description;
@@ -24,7 +25,7 @@ public class Event implements Comparable<Event>, Serializable {
 	 */
 	public Event() {
 	}
-	
+
 	/**
 	 * Konstruktor kopiuj¹cy.
 	 * 
@@ -37,7 +38,7 @@ public class Event implements Comparable<Event>, Serializable {
 		this.place = new String(e.getPlace());
 		this.startDate = new Date(e.getStartDate().getTime());
 		this.endDate = new Date(e.getEndDate().getTime());
-		if(e.getAlarmDate() == null)
+		if (e.getAlarmDate() == null)
 			this.alarmDate = null;
 		else
 			this.alarmDate = new Date(e.getAlarmDate().getTime());
@@ -185,11 +186,11 @@ public class Event implements Comparable<Event>, Serializable {
 	}
 
 	/**
-	 * Komparator waznosci Wydarzenia.
+	 * Komparator nazwy Wydarzenia.
 	 */
 	public static Comparator<Event> NameComparator = new Comparator<Event>() {
 		/**
-		 * Porownuje Wydarzenia na podstawie waznosci.
+		 * Porownuje Wydarzenia na podstawie nazwy.
 		 */
 		@Override
 		public int compare(Event e1, Event e2) {

@@ -1,9 +1,10 @@
 package org.organizer;
 
+/**
+ * Klasa reprezentujaca pojedynczy blad w wydarzeniu.
+ */
 public class EventException extends Exception {
-	/**
-	 * Klasa reprezentujaca pojedynczy blad w wydarzeniu.
-	 */
+
 	private static final long serialVersionUID = 1L;
 
 	EventException() {
@@ -11,9 +12,9 @@ public class EventException extends Exception {
 	}
 
 	/**
-	 * Konstruktor tworzacy //okno dialogowe// z opisem bledu w Wydazrzeniu.
+	 * Przekazuje wiadomosc o bledzie.
 	 * 
-	 * @param msg Wiadowosc z informacja o bledzie
+	 * @param msg Wiadomosc wyjatka
 	 */
 	EventException(String msg) {
 		super(msg);
