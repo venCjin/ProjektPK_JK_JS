@@ -1,10 +1,12 @@
 package org.organizer;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -21,11 +23,11 @@ public class DeleteBeforeWindow {
 	/**
 	 * Tworzy okno usuwania wydarzeñ.
 	 */
-	public static void show() {
+	public static void show(JCalendar calendar) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DeleteBeforeWindow window = new DeleteBeforeWindow();
+					DeleteBeforeWindow window = new DeleteBeforeWindow(calendar);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -34,14 +36,14 @@ public class DeleteBeforeWindow {
 		});
 	}
 
-	private DeleteBeforeWindow() {
-		initialize();
+	private DeleteBeforeWindow(JCalendar calendar) {
+		initialize(calendar);
 	}
 
 	/**
 	 * Inicjalizuje zawartoœæ okna usuwania wydarzeñ.
 	 */
-	private void initialize() {
+	private void initialize(JCalendar calendar) {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 330, 110);
 		frame.getContentPane().setLayout(null);
@@ -66,6 +68,7 @@ public class DeleteBeforeWindow {
 				}
 				JOptionPane.showMessageDialog(null, "Operacja zakoñczona powodzeniem.",
 						"Usuwanie wydarzeñ starszych ni¿...", JOptionPane.INFORMATION_MESSAGE);
+				calendar.repaint();
 				frame.dispose();
 			}
 		});

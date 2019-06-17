@@ -9,8 +9,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.KeyEventDispatcher;
-import java.awt.KeyboardFocusManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.SQLException;
@@ -25,7 +23,7 @@ import java.awt.event.InputEvent;
  */
 public class OrganizerWindow {
 	private JFrame frame;
-	private Color eventDayColor = Color.YELLOW;
+	private Color searchedEventColor = Color.YELLOW;
 
 	/**
 	 * Tworzy okno programu Organizera.
@@ -67,7 +65,7 @@ public class OrganizerWindow {
 		calendar.getDayChooser().addPropertyChangeListener("day", new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				DayWindow.show(Operations.parseDateToString(calendar.getDate(), "dd-MM-yyyy"), eventDayColor);
+				DayWindow.show(Operations.parseDateToString(calendar.getDate(), "dd-MM-yyyy"), searchedEventColor);
 			}
 		});
 		calendar.setBounds(0, 0, 432, 250);
@@ -91,16 +89,14 @@ public class OrganizerWindow {
 		JMenuItem mntmDelOlderThan = new JMenuItem("Usuñ starsze niz...");
 		mntmDelOlderThan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DeleteBeforeWindow.show();
-				Operations.colorSearchedEvents(calendar, eventDayColor);
+				DeleteBeforeWindow.show(calendar, searchedEventColor);
 			}
 		});
 
 		JMenuItem mntmWyszukaj = new JMenuItem("Wyszukaj");
 		mntmWyszukaj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SearchWindow.show();
-				Operations.colorSearchedEvents(calendar, eventDayColor);
+				SearchWindow.show(calendar, searchedEventColor);
 			}
 		});
 		mnEvents.add(mntmWyszukaj);
@@ -120,6 +116,7 @@ public class OrganizerWindow {
 				try {
 					sql.deleteAllEventsSQL();
 					sql.writeAllEventsSQL(Data.AllEvents);
+					JOptionPane.showMessageDialog(new JFrame(), "Zapis do bazy danych SQL powiód³ siê.", "Zapis", JOptionPane.PLAIN_MESSAGE);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception", JOptionPane.ERROR_MESSAGE);
 				}
@@ -132,6 +129,7 @@ public class OrganizerWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					XMLData.writeXML(Data.AllEvents);
+					JOptionPane.showMessageDialog(new JFrame(), "Zapis do pliku XML powiód³ siê.", "Zapis", JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "XML Exception", JOptionPane.ERROR_MESSAGE);
 				}
@@ -144,6 +142,7 @@ public class OrganizerWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					CSVData.writeCSV(Data.AllEvents);
+					JOptionPane.showMessageDialog(new JFrame(), "Zapis do bazy pliku CSV powiód³ siê.", "Zapis", JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "CSV Exception", JOptionPane.ERROR_MESSAGE);
 				}
@@ -161,11 +160,11 @@ public class OrganizerWindow {
 				try {
 					Data.AllEvents = sql.readAllEventsSQL();
 					System.out.println(Data.AllEvents);
-					JOptionPane.showMessageDialog(new JFrame(), "Zapis do bazy danych SQL powiód³ siê.", "Zapis", JOptionPane.PLAIN_MESSAGE);
+					JOptionPane.showMessageDialog(new JFrame(), "Odczyt z bazy danych SQL powiód³ siê.", "Odczyt", JOptionPane.PLAIN_MESSAGE);
 				} catch (SQLException e1) {
 					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "SQL Exception", JOptionPane.ERROR_MESSAGE);
 				}
-//				Operations.colorSearchedEvents(calendar, eventDayColor);
+//				Operations.colorSearchedEvents(calendar, searchedEventColor);
 			}
 		});
 		mnWczytaj.add(mntmZBazySql);
@@ -175,10 +174,11 @@ public class OrganizerWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Data.AllEvents = XMLData.readXML();
+					JOptionPane.showMessageDialog(new JFrame(), "Odczyt z pliku XML powiód³ siê.", "Odczyt", JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "XML Exception", JOptionPane.ERROR_MESSAGE);
 				}
-//				Operations.colorSearchedEvents(calendar, eventDayColor);
+//				Operations.colorSearchedEvents(calendar, searchedEventColor);
 			}
 		});
 		mnWczytaj.add(mntmZXml);
@@ -188,10 +188,11 @@ public class OrganizerWindow {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Data.AllEvents = CSVData.readCSV();
+					JOptionPane.showMessageDialog(new JFrame(), "Odczyt z pliku CSV powiód³ siê.", "Odczyt", JOptionPane.PLAIN_MESSAGE);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(new JFrame(), e1.getMessage(), "CSV Exception", JOptionPane.ERROR_MESSAGE);
 				}
-//				Operations.colorSearchedEvents(calendar, eventDayColor);
+//				Operations.colorSearchedEvents(calendar, searchedEventColor);
 			}
 		});
 		mnWczytaj.add(mntmZCsv);
@@ -202,10 +203,10 @@ public class OrganizerWindow {
 		JMenuItem mntmChangeColor = new JMenuItem("Zmien kolor");
 		mntmChangeColor.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Color newColor = JColorChooser.showDialog(null, "Wybor koloru", eventDayColor);
+				Color newColor = JColorChooser.showDialog(null, "Wybor koloru", searchedEventColor);
 				if (newColor != null) {
-					eventDayColor = newColor;
-					Operations.colorSearchedEvents(calendar, eventDayColor);
+					searchedEventColor = newColor;
+					calendar.repaint();
 				}
 			}
 		});
@@ -224,6 +225,8 @@ public class OrganizerWindow {
 		});
 		mnInfo.add(mntmInfo);
 
+		Operations.colorEventsInMonth(calendar, Data.SearchedEvents, this.searchedEventColor);
+		
 		// [W/S] - prze³¹czenie roku
 		// [A/D] - prze³¹czenie miesi¹ca
 		/*
@@ -237,7 +240,7 @@ public class OrganizerWindow {
 							calendar.getMonthChooser().setMonth(11);
 						} else
 							calendar.getMonthChooser().setMonth(calendar.getMonthChooser().getMonth() - 1);
-						Operations.colorSearchedEvents(calendar, eventDayColor);
+						Operations.colorSearchedEvents(calendar, searchedEventColor);
 						break;
 					case KeyEvent.VK_D:
 						if (calendar.getMonthChooser().getMonth() == 11) {
@@ -245,7 +248,7 @@ public class OrganizerWindow {
 							calendar.getMonthChooser().setMonth(0);
 						} else
 							calendar.getMonthChooser().setMonth(calendar.getMonthChooser().getMonth() + 1);
-						Operations.colorSearchedEvents(calendar, eventDayColor);
+						Operations.colorSearchedEvents(calendar, searchedEventColor);
 						break;
 					case KeyEvent.VK_W:
 						calendar.getYearChooser().setYear(calendar.getYearChooser().getYear() + 1);

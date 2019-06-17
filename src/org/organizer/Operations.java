@@ -175,17 +175,50 @@ public class Operations {
 	public static List<Event> getEventsForDay(Date day) {
 		if (day == null)
 			return null;
+		
+		Date start = Operations.parseDate(day, 0, 0, 0);
+		Date end = Operations.parseDate(day, 24, 59, 59);
+		
 		List<Event> dayEvents = new ArrayList<Event>();
+		
 		for (Event e : Data.AllEvents) {
-			if (e.getEndDate().before(Operations.parseDate(day, 0, 0, 0)))
+			if (e.getEndDate().before(start))
 				continue;
-			if (e.getStartDate().after(Operations.parseDate(day, 24, 59, 59)))
+			if (e.getStartDate().after(end))
 				continue;
 			dayEvents.add(e); // przekazujemy przez referencjê ¿eby mo¿na by³o go pozniej edytowaæ lub usunac
 		}
 		return dayEvents;
 	}
 
+	/**
+	 * Zwraca listê wydarzeñ dla danego miesiaca.
+	 * 
+	 * @param calendar Kalendarz, obiekt klasy JCalendar
+	 * @param events Lista wydarzeñ do przeszukania
+	 * @return Lista wydarzeñ z danego miesiaca
+	 */
+	public static List<Event> getEventsForActualMonth(JCalendar calendar, List<Event> events) {
+
+		Calendar tmpCalendar = (Calendar) calendar.getCalendar().clone();
+		tmpCalendar.set(Calendar.DAY_OF_MONTH, 1);
+		Date start = parseDate(tmpCalendar.getTime());
+		
+		tmpCalendar.add(Calendar.MONTH, 1);
+		tmpCalendar.add(Calendar.DAY_OF_MONTH, -1);
+		Date end = parseDate(tmpCalendar.getTime(), 24, 59, 59);
+		
+		List<Event> monthEvents = new ArrayList<Event>();
+		for (Event e : events) {
+			if (e.getEndDate().before(start))
+				continue;
+			if (e.getStartDate().after(end))
+				continue;
+			monthEvents.add(e); // przekazujemy przez referencjê ¿eby mo¿na by³o go pozniej edytowaæ lub usunac
+		}
+		return monthEvents;
+	}
+	
 	public static void deleteEvent(Event e) {
 		Data.AllEvents.remove(e);
 	}
@@ -260,16 +293,18 @@ public class Operations {
 	 * @param calendar Kalendarz, obiekt klasy JCalendar
 	 * @param c        Kolor
 	 */
-	public static void colorSearchedEvents(JCalendar calendar, Color c) {
-		JButton j = getDayButton(calendar, 1);
-		j.setBackground(c);
-
-		// TODO eee reszta kodu
-
-//		System.out.println(offset);
-		// 49 = 7(decoration) + hidden(x1) + (28/30/31 monthDays) + hidden(x2)
-//		for(int i=0; i<49 ; ++i)
-//			System.out.println(j.getComponent(i));
+	public static void colorEventsInMonth(JCalendar calendar, List<Event> events, Color c) {
+		
+		List<Event> l = getEventsForActualMonth(calendar, events);
+		Calendar start = (Calendar) calendar.getCalendar().clone();
+		Calendar end = (Calendar) calendar.getCalendar().clone();
+		
+		for(Event e : l) {
+			start.setTime(e.getStartDate());
+			end.setTime(e.getEndDate());
+			JButton j = getDayButton(calendar, start.get(Calendar.DAY_OF_MONTH));
+			j.setBackground(c);
+		}
 	}
 
 	/**
@@ -280,39 +315,20 @@ public class Operations {
 	 * @return JButton okreœlonego dania miesiaca
 	 */
 	public static JButton getDayButton(JCalendar calendar, int day) {
-		String input = "1/" + (calendar.getMonthChooser().getMonth() + 1) + "/" + calendar.getYearChooser().getYear();
-		Calendar temp = Calendar.getInstance();
-		temp.setTime(Operations.parseStringToDate(input, "d/M/yyyy"));
-		int offset = temp.get(Calendar.DAY_OF_WEEK); // 1==nd
-		if (offset == 1) // jesli niedziela(==1) to 6 buttonow przed nia nieaktywnych
+		
+		Calendar tmpCalendar = (Calendar) calendar.getCalendar().clone(); // aktualna data
+		tmpCalendar.set(Calendar.DAY_OF_MONTH, 1); // pierwszy dzieñ miesiaca
+		
+		int offset = tmpCalendar.get(Calendar.DAY_OF_WEEK); // 1==nd
+		if (offset == 1)	// jesli niedziela(==1) to 6 buttonow przed nia nieaktywnych
 			offset = 6;
-		else // jesli pon(==2) to 0 buttonow przed nia nieaktywnych
+		else				// jesli pon(==2) to 0 buttonow przed nia nieaktywnych
 			offset -= 2;
-		offset += 6; // 7 buttonow nieaktywnych wyswietlajacych dni tygonia
-						// ustawiamy na ostatnim bo jesli day==1 to
+		offset += 6;		// 7 buttonow nieaktywnych wyswietlajacych dni tygonia
+							// ustawiamy na ostatnim bo jesli day==1 to
 		if (day < 1)
 			day = 1;
 
-//		int daysInCurrentMonth = 1;
-//		switch (calendar.getMonthChooser().getMonth() + 1) {
-//		case 2:
-//			if (calendar.getYearChooser().getYear() % 4 == 0)
-//				daysInCurrentMonth = 29;
-//			else
-//				daysInCurrentMonth = 28;
-//			break;
-//		case 4:
-//		case 6:
-//		case 9:
-//		case 11:
-//			daysInCurrentMonth = 30;
-//			break;
-//		default:
-//			daysInCurrentMonth = 31;
-//		}
-
-		Calendar tmpCalendar = (Calendar) calendar.getCalendar().clone();
-		tmpCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		tmpCalendar.add(Calendar.MONTH, 1);
 		tmpCalendar.add(Calendar.DAY_OF_MONTH, -1);
 		int daysInCurrentMonth = tmpCalendar.get(Calendar.DAY_OF_MONTH);

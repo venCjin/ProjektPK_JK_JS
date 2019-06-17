@@ -8,7 +8,7 @@
 
 > okienko dnia ()
 |	- logika (OK)
-|	- gui (OK) (DayWindow)
+|	- gui () (DayWindow) - rysowanie przycisków gdy przechodzi z 1 dnia na 2
 |	- cli (OK)
 |	> usuwanie wydarzenia
 |		- gui (OK) (DayWindow)
@@ -25,11 +25,11 @@
 
 > szukaj Eventy (OK)
 	- logika (OK)
-	- gui ()
+	- gui (OK)
 	- cli (OK)
 
-> usuń strsze niż ()
-	- logika () - nie usuwa niektórych wydarzen, przyczyna niezidentyfikowana
+> usuń strsze niż (OK)
+	- logika (OK)
 	- gui (OK) (DeleteBeforeWindow)
 	- cli (OK)
 

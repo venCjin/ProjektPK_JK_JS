@@ -8,6 +8,8 @@ import javax.swing.JCheckBox;
 import java.awt.EventQueue;
 
 import javax.swing.JButton;
+
+import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
 import javax.swing.JTextField;
@@ -19,24 +21,25 @@ import java.awt.event.ActionEvent;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-
+	
+/**
+ * Klasa reprezentujaca okno JFrame dodawania wydarzenia do kalendarza.
+ */
 public class AddEventWindow {
-	/**
-	 * Klasa reprezentujaca okno JFrame dodawania Wydarzenia do kalendarza.
-	 */
+
 	private JFrame frame;
 	private JTextField nameField;
 	private JTextField descField;
 	private JTextField placeField;
 
 	/**
-	 * Pokazuje okno do dodania nowego Wydarzenia.
+	 * Pokazuje okno do dodania nowego wydarzenia.
 	 */
-	public static void show() {
+	public static void show(JCalendar calendar) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					AddEventWindow window = new AddEventWindow();
+					AddEventWindow window = new AddEventWindow(calendar);
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,16 +49,16 @@ public class AddEventWindow {
 	}
 
 	/**
-	 * Inicjalizuje okno do dodania nowego Wydarzenia.
+	 * Inicjalizuje okno do dodania nowego wydarzenia.
 	 */
-	protected AddEventWindow() {
-		initialize();
+	protected AddEventWindow(JCalendar calendar) {
+		initialize(calendar);
 	}
 
 	/**
-	 * Inicjalizuje zawartoœæ okna do dodania nowego Wydarzenia.
+	 * Inicjalizuje zawartoœæ okna do dodania nowego wydarzenia.
 	 */
-	private void initialize() {
+	private void initialize(JCalendar calendar) {
 		frame = new JFrame("Dodaj wydarzenie");
 		frame.setBounds(100, 100, 450, 300);
 		frame.setResizable(false);
@@ -173,6 +176,7 @@ public class AddEventWindow {
 							Operations.parseDate(endDateChooser.getDate(), (int) endHourSpin.getValue(),
 									(int) endMinSpin.getValue(), 0),
 							alarmDate);
+					calendar.repaint();
 					frame.dispose();
 				} catch (EventException err) {
 					JOptionPane.showMessageDialog(new JFrame(), err.getMessage(), "EventException", JOptionPane.ERROR_MESSAGE);
