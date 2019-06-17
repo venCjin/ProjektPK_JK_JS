@@ -223,6 +223,17 @@ public class Operations {
 		Data.AllEvents.remove(e);
 	}
 
+	public static List<Event> getEventsFromDateWithAlarm(Date d) {
+		List<Event> found = new ArrayList<Event>();
+		
+		for(Event e : Data.AllEvents) {
+			if (e.getEndDate().before(d) && e.getAlarmDate() != null)
+				found.add(new Event(e));
+		}
+		
+		return found;
+	}
+	
 	/**
 	 * Usuwa wydarzenia, które zakoñcz¹ siê przed podan¹ dat¹ i czyœci liste szukanych wydarzeñ.
 	 * 
@@ -267,7 +278,7 @@ public class Operations {
 		Data.SearchedEvents.clear();
 		for (Event e : Data.AllEvents)
 			if (e.getName().contains(phrase))
-				Data.SearchedEvents.add(e);
+				Data.SearchedEvents.add(new Event(e));
 	}
 
 	public static String info() {

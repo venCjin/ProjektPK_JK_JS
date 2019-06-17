@@ -1,9 +1,12 @@
 package org.organizer;
 
+import java.awt.Toolkit;
 import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
 
 public class CLI {
 
@@ -40,10 +43,10 @@ public class CLI {
 
 		System.out.println("Czy chcesz ustwaic alarm? [t/n]");
 		if (terminal.next().equalsIgnoreCase("t")) {
-			System.out.println("Podaj date alarmu w formacie dd-MM-yyyy  : ");
-//			System.out.println("Podaj date alarmu w formacie dd-MM-yyyy HH:mm:ss : ");
+//			System.out.println("Podaj date alarmu w formacie dd-MM-yyyy  : ");
+			System.out.println("Podaj date alarmu w formacie dd-MM-yyyy HH:mm:ss : ");
 			System.out.print("data alarmu> "); alarmDate = terminal.next();
-//			alarmDate += " " + terminal.next();
+			alarmDate += " " + terminal.next();
 		}
 
 		try {
@@ -53,8 +56,8 @@ public class CLI {
 					place,
 					Operations.parseStringToDate(startDate, "dd-MM-yyyy HH:mm:ss"),
 					Operations.parseStringToDate(endDate, "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy")
-//					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy HH:mm:ss")
+//					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy")
+					Operations.parseStringToDate(alarmDate, "dd-MM-yyyy HH:mm:ss")
 					);
 		} catch (EventException e) {
 			System.err.println(e.getMessage());
@@ -331,6 +334,18 @@ public class CLI {
 		}
 	}
 	
+	private static void alarm(Alarm alarm, boolean gui) {
+		if(alarm.getShow()) {
+			Toolkit.getDefaultToolkit().beep();
+			if(gui)
+				JOptionPane.showMessageDialog(null, "Masz nadchodz¹ce wydarzenie:\n" + alarm.getEvent().toString(),
+					"Alarm", JOptionPane.WARNING_MESSAGE);
+			else
+				System.out.println("Masz nadchodz¹ce wydarzenie:\n" + alarm.getEvent().toString());
+			alarm.seenAlarm();
+		}
+	}
+	
 	/**
 	 * Uruchamia program z argumentami
 	 * 
@@ -341,33 +356,33 @@ public class CLI {
 /* dane wstepne */
 /* do testów */
 		try {
-			Operations.addEvent("1", "", "", Operations.parseStringToDate("16-06-2019 01:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("16-06-2019 02:30:00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("16-06-2019 01:30:00", "dd-MM-yyyy HH:mm:ss"));
+			Operations.addEvent("1", "", "", Operations.parseStringToDate("17-06-2019 01:00:00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 02:30:00", "dd-MM-yyyy HH:mm:ss"), Operations.parseStringToDate("16-06-2019 11:28:00", "dd-MM-yyyy HH:mm:ss"));
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
 		try {
-			Operations.addEvent("2", "", "", Operations.parseStringToDate("16-06-2019 03:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("16-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"), null);
+			Operations.addEvent("2", "", "", Operations.parseStringToDate("17-06-2019 03:00:00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"), null);
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
 		try {
-			Operations.addEvent("3", "", "", Operations.parseStringToDate("16-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("16-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
+			Operations.addEvent("3", "", "", Operations.parseStringToDate("17-06-2019 05:00:00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
 		
 		try {
-			Operations.addEvent("as", "", "", Operations.parseStringToDate("16-06-2019 07:20:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("16-06-2019 07:40:00", "dd-MM-yyyy HH:mm:ss"), null);
+			Operations.addEvent("as", "", "", Operations.parseStringToDate("17-06-2019 07:20:00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("17-06-2019 07:40:00", "dd-MM-yyyy HH:mm:ss"), null);
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
 		try {
-			Operations.addEvent("alolblee kk", "", "", Operations.parseStringToDate("16-06-2019 08:00:00", "dd-MM-yyyy HH:mm:ss"),
-					Operations.parseStringToDate("17-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
+			Operations.addEvent("alolblee kk", "", "", Operations.parseStringToDate("17-06-2019 08:00:00", "dd-MM-yyyy HH:mm:ss"),
+					Operations.parseStringToDate("18-06-2019 07:11:00", "dd-MM-yyyy HH:mm:ss"), null);
 		} catch (EventException e) {
 			e.printStackTrace();
 		}
@@ -378,15 +393,21 @@ public class CLI {
 
 		if (args.length > 0) {
 			if (args[0].equals("GUI")) {
+				
+				Alarm alarm = new Alarm();
 				OrganizerWindow.show();
+				alarm(alarm, true);
+				
 			} else if (args[0].equals("CLI")) {
+				
 				System.out.println("Witaj w Organizerze");
 				System.out.println("Napisz 'help' by uzyskac pomoc");
-
+				
+				Alarm alarm = new Alarm();
 				do {
-					System.out.print("\npolecenie> ");
+					alarm(alarm, false);
 				} while (command(terminal.next()));
-
+				
 			} else {
 				throw new RuntimeException("Niepoprawne argumenty uruchamiania programu.");
 			}

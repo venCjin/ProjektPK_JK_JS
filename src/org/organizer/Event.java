@@ -24,6 +24,24 @@ public class Event implements Comparable<Event>, Serializable {
 	 */
 	public Event() {
 	}
+	
+	/**
+	 * Konstruktor kopiuj¹cy.
+	 * 
+	 * @param e Wydarzenie do skopiowania
+	 */
+	public Event(Event e) {
+		super();
+		this.name = new String(e.getName());
+		this.description = new String(e.getDescription());
+		this.place = new String(e.getPlace());
+		this.startDate = new Date(e.getStartDate().getTime());
+		this.endDate = new Date(e.getEndDate().getTime());
+		if(e.getAlarmDate() == null)
+			this.alarmDate = null;
+		else
+			this.alarmDate = new Date(e.getAlarmDate().getTime());
+	}
 
 	/**
 	 * Konstruktor tworzacy nowy obiekt z podanymi parametrami.
@@ -186,7 +204,7 @@ public class Event implements Comparable<Event>, Serializable {
 	public String toString() {
 		String alarm;
 		if (alarmDate != null)
-			alarm = Operations.parseDateToString(alarmDate, "dd-MM-yyyy");
+			alarm = Operations.parseDateToString(alarmDate, "dd-MM-yyyy HH:mm:ss");
 		else
 			alarm = "(nie ustawiono)";
 		return "Nazwa: " + name + ", opis: " + description + ", miejsce: " + place + ", data rozpoczecia: "

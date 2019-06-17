@@ -35,7 +35,7 @@ public class OrganizerWindow {
 					OrganizerWindow window = new OrganizerWindow();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
-					e.getMessage();
+					e.printStackTrace();
 				}
 			}
 		});
@@ -81,7 +81,7 @@ public class OrganizerWindow {
 		mntmAdd.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
 		mntmAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				AddEventWindow.show();
+				AddEventWindow.show(calendar);
 			}
 		});
 		mnEvents.add(mntmAdd);
@@ -89,14 +89,14 @@ public class OrganizerWindow {
 		JMenuItem mntmDelOlderThan = new JMenuItem("Usuñ starsze niz...");
 		mntmDelOlderThan.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DeleteBeforeWindow.show(calendar, searchedEventColor);
+				DeleteBeforeWindow.show(calendar);
 			}
 		});
 
 		JMenuItem mntmWyszukaj = new JMenuItem("Wyszukaj");
 		mntmWyszukaj.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SearchWindow.show(calendar, searchedEventColor);
+				SearchWindow.show(calendar);
 			}
 		});
 		mnEvents.add(mntmWyszukaj);
