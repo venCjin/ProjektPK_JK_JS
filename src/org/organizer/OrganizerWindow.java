@@ -226,40 +226,5 @@ public class OrganizerWindow {
 		mnInfo.add(mntmInfo);
 
 		Operations.colorEventsInMonth(calendar, Data.SearchedEvents, this.searchedEventColor);
-		
-		// [W/S] - prze³¹czenie roku
-		// [A/D] - prze³¹czenie miesi¹ca
-		/*
-		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
-			public boolean dispatchKeyEvent(KeyEvent e) {
-				if (e.getID() == KeyEvent.KEY_PRESSED) {
-					switch(e.getKeyCode()) {
-					case KeyEvent.VK_A:
-						if (calendar.getMonthChooser().getMonth() == 0) {
-							calendar.getYearChooser().setYear(calendar.getYearChooser().getYear() - 1);
-							calendar.getMonthChooser().setMonth(11);
-						} else
-							calendar.getMonthChooser().setMonth(calendar.getMonthChooser().getMonth() - 1);
-						Operations.colorSearchedEvents(calendar, searchedEventColor);
-						break;
-					case KeyEvent.VK_D:
-						if (calendar.getMonthChooser().getMonth() == 11) {
-							calendar.getYearChooser().setYear(calendar.getYearChooser().getYear() + 1);
-							calendar.getMonthChooser().setMonth(0);
-						} else
-							calendar.getMonthChooser().setMonth(calendar.getMonthChooser().getMonth() + 1);
-						Operations.colorSearchedEvents(calendar, searchedEventColor);
-						break;
-					case KeyEvent.VK_W:
-						calendar.getYearChooser().setYear(calendar.getYearChooser().getYear() + 1);
-						break;
-					case KeyEvent.VK_S:
-						calendar.getYearChooser().setYear(calendar.getYearChooser().getYear() - 1);
-						break;
-					}
-				}
-				return false;
-			}
-		});*/
 	}
 }
